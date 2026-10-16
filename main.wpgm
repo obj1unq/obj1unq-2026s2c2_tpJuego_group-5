@@ -1,0 +1,21 @@
+import wollok.game.*
+import videojuegoGRUPO5.*
+
+program videojuego {
+
+    game.width(10)
+    game.height(10)
+    game.cellSize(50)
+
+	generadorDeVehiculos.generar(6)
+    	
+	game.addVisual(alumno)
+	game.addVisual(unq)
+
+    keyboard.left().onPressDo({ alumno.mover(izquierda) })
+    keyboard.right().onPressDo({ alumno.mover(derecha) })
+    keyboard.up().onPressDo({ alumno.mover(arriba) })
+    keyboard.down().onPressDo({ alumno.mover(abajo) })
+
+    game.start()
+}
