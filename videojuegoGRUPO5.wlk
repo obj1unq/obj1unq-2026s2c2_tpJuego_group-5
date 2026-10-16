@@ -110,15 +110,15 @@ object abajo {
     }
 }
 
+// =====================================================================
+//  ALUMNO: PERSONAJE PRINCIPAL
+// =====================================================================
 object alumno {
-    var vidaRestante = terceraVida
+    const vidasRestantes = salud
     var property position = game.at(4,0)
-    var aspecto = alumnoSano
 	
 	method descontarVida(){
-		vidaRestante.marcarComoPerdida()
-		vidaRestante = vidaRestante.vidaInferior()
-		aspecto = aspecto.siguienteEtapa()
+		vidasRestantes.perderUnaVida()
 	}
    
 	method serAtropellado() {
@@ -143,14 +143,19 @@ object alumno {
 	method volverAlInicio() { position = game.at(4,0) }
 
 	method estaMuerto() {
-		return vidaRestante.cantidadDeVidas() == 0
+		return !vidasRestantes.hayVidas()
 	}
 
 	method mover(direccion) {
 		position = direccion.siguiente(position)
 	  
 	}
-	method image() = "estudiante_" + aspecto.nombre() + ".png"
+	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
+	
+	//interacciones con colisiones:
+	method interactuar(algo){
+		algo.interaccion(self)
+	}
 }
 
 object unq {
