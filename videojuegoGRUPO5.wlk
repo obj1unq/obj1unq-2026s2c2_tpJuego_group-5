@@ -178,61 +178,78 @@ object autoADerecha {
 	}
 }
 
-//=====Sector de Vida===
-//
-object primeraVida{
-	var property position = game.at(7,0)
-	var aspecto = self
-
-	method cantidadDeVidas() = 1
-
-	method image() = aspecto.nombre() + "_vida.png"
-	method nombre() = "primera"
-
-	method marcarComoPerdida(){
-		aspecto = self.vidaInferior()
-	}
-	method vidaInferior() = sinVida	
-}
-object segundaVida{
-	var property position = game.at(8,0)
-	var aspecto = self
-
-	method cantidadDeVidas() = 2
-
-	method image() = aspecto.nombre() + "_vida.png"
-	method nombre() = "segunda"
+// =====================================================================
+//  VIDAS DEL PERSONAJE PRINCIPAL
+// =====================================================================
+class Vida{
+	var property position
+	const nombre
+	const cantidadDeVidas
+	var aspecto = conVida
 	
-	method marcarComoPerdida(){
-		aspecto = sinVida
-	}
-		
-	method vidaInferior() = primeraVida
-}
-object terceraVida{
-	var property position = game.at(9,0)
-	var aspecto = self
+	method cantidadDeVidas() = cantidadDeVidas
 	
-	method cantidadDeVidas() = 3
-	
-	method image() = aspecto.nombre()+"_vida.png"
-	method nombre() = "tercera"
+	method image() = aspecto.nombreDeVida(nombre) + "_vida.png"
 	
 	method marcarComoPerdida(){
 		aspecto = sinVida
 	}
 	
-	method vidaInferior() = segundaVida
+	method marcarComoRecuperada(){
+		aspecto = conVida
+	}
+	
+	method estaPerdida() = aspecto.estaPerdida()
 }
+object salud {
+	//Es en orden descendente, es decir, de la vida mas alta (3) hasta la mas baja (1)
+	const vidas = [
+        new Vida(position = game.at(9,0), nombre = "tercera",   cantidadDeVidas = 3),
+        new Vida(position = game.at(8,0), nombre = "segunda",   cantidadDeVidas = 2),
+		new Vida(position = game.at(7,0), nombre = "primera",   cantidadDeVidas = 1)
+    ]
+
+    method iniciar() {
+        vidas.forEach({ vida => game.addVisual(vida) })
+    }
+
+	method cuantasVidasHay() = 
+		if (self.hayVidas()) {self.encontrarVidaNoPerdida().cantidadDeVidas()}
+		else { 0 }
+	method hayVidas() = vidas.any({vida => !vida.estaPerdida()})
+	method encontrarVidaNoPerdida() = vidas.find({vida => !vida.estaPerdida()})
+	
+	method perderUnaVida(){
+		if(self.hayVidas()){
+			self.encontrarVidaNoPerdida().marcarComoPerdida()
+		}
+	}
+	
+	method ganarUnaVida(){
+		self.validarGanarVida()
+		self.encontrarVidaPerdida().marcarComoRecuperada()
+	}
+	method validarGanarVida(){
+		if(!self.hayAlgunaVidaPerdida()){
+			self.error("Tengo las vidas llenas")
+		}
+	}
+	method hayAlgunaVidaPerdida() = vidas.any({vida => vida.estaPerdida()})
+	method encontrarVidaPerdida() = vidas.filter({vida => vida.estaPerdida()}).last()
+}
+
+//Objetos de tipo estadoDeVida que son usados por salud
 object sinVida{
-	method nombre() = "sin"
+	method nombreDeVida(nombre) = "sin"
 	
-	method vidaInferior() = self
-	
-	method cantidadDeVidas() = 0
+	method estaPerdida() = true
 }
-//=====Aca finaliza===
-//
+
+object conVida{
+	method nombreDeVida(nombre) = nombre
+	
+	method estaPerdida() = false
+}
 
 
 //=====Sector de alumno===
