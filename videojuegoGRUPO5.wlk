@@ -123,7 +123,7 @@ object conVida{
 }
 
 // =====================================================================
-//  DIRECCIONES del PERSONAJE PRINCIPAL
+//  DIRECCIONES del PERSONAJE PRINCIPAL. Tambien son usadas para Carriles/Vehiculos
 // =====================================================================
 object izquierda {
 
@@ -183,150 +183,100 @@ object abajo {
 //  CARRILES y todas las class y object que son de dominio obtaculos.
 // =====================================================================
 class Carril {
-    const direccion
+	const property fila
+    const property direccion
+	const property tiempoDeEspera
+	const intervaloMinimo 
+    const intervaloMaximo 
+    const tiposDeVehiculo 
 
-    method direccion() = direccion
 
-    method posicionInicial(fila) = game.at(direccion.columnaInicial(), fila)
-
-    method agregar(vehiculo) {
-        vehiculo.asignarCarril(self)
+    method posicionInicial() = game.at(direccion.columnaInicial(), fila)
+	
+    method iniciarViaje() {
+		const vehiculo = self.agregarVehiculoNuevo()
         game.addVisual(vehiculo)
-        game.onCollideDo(vehiculo, { alumno => alumno.serAtropellado() })
         vehiculo.empezarARecorrer()
     }
-}
-
-object carrilDerecha inherits Carril(direccion = derecha) {}
-object carrilIzquierda inherits Carril(direccion = izquierda) {}
-
-/*
-object generadorDeVehiculos {
-    const carriles = [carrilDerecha, carrilIzquierda]
-    const intervalosPosibles = [300, 400, 500, 600, 800, 900]
-    const filasLibres = [1, 2, 3, 4, 5, 6]
-
-    method generar(cantidad) {
-        cantidad.times({ n => self.agregarVehiculoAleatorio() })
-    }
-
-    method agregarVehiculoAleatorio() {
-        const fila = filasLibres.anyOne()
-        filasLibres.remove(fila)
-
-        const carril = carriles.anyOne()
-        const intervalo = intervalosPosibles.anyOne()
-
-        carril.agregar(new Vehiculo(fila = fila, intervaloEnMs = intervalo))
-    }
-}
-
-*/
-
-object autoADerecha {
-    var property position = game.at(0,2) 
 	
-	method posicionInicial() = game.at(0,2) 
+	method retirarVehiculo(vehiculo){
+		game.removeVisual(vehiculo)
+		game.schedule(tiempoDeEspera, { => self.iniciarViaje() })
+	}
 	
-	method empezarARecorrer() {
-		game.onTick(800, "moverD", {self.autoMueveDerecha()})
+	method agregarVehiculoNuevo(){
+		return
+			new Vehiculo(
+				carril = self ,
+				intervaloEnMs = self.intervaloEnMsAleatorio(),
+				tipo = tiposDeVehiculo.anyOne() )
 	}
-	method image () = "auto.png" 
-
-	method autoMueveDerecha() {
-		if (position.x() < 10){
-			position = position.right(1)
-		}else{
-			position = self.posicionInicial()
-		}
-	}
+	
+	method intervaloEnMsAleatorio() = intervaloMinimo.randomUpTo(intervaloMaximo).truncate(0)
 }
 
 class Vehiculo {
-    const fila
+    const carril
     const intervaloEnMs
-    var carril = null
-    var property position = null
-    var property tipoVehiculo = auto
-    
+    const tipo
+	var property position = carril.posicionInicial()
+    const tick = game.tick(intervaloEnMs, { self.avanzar() }, false)
 
-    method image() = tipoVehiculo.nombre() + ".png"
+    method image() = tipo.nombre() + ".png"
 
+    method empezarARecorrer() { tick.start() }
 
-    
-
-    method asignarCarril(unCarril) {
-        carril = unCarril
-        position = unCarril.posicionInicial(fila)
-    }
-
-    method empezarARecorrer() {
-        const tick = game.tick(intervaloEnMs, { self.avanzar() }, false)
-        tick.start()
-    }
-
-     method avanzar() {
+    method avanzar() {
         if (carril.direccion().puedeAvanzar(position)) {
             position = carril.direccion().siguiente(position)
         } else {
-            game.removeVisual(self)
-            generadorDeVehiculos.agregarEnCarril(carril.)
+			tick.stop()
+			carril.retirarVehiculo(self)
         }
+    }
+	
+	method interaccion(alumno){
+		alumno.serAtropellado()
+	}
+}
 
+object generadorDeCarriles {
+    const direcciones = [derecha, izquierda]
+    const tiposDeVehiculo = [auto, camion]
+    const filasLibres = [1, 2, 3, 4, 5, 6]
+	const carriles = []
+
+    method generar(cantidad) {
+        self.validarCantidad(cantidad)
+        cantidad.times({ n => self.agregarCarrilesAleatorio() })
+		carriles.forEach( {carril => carril.iniciarViaje()})
+    }
+
+    method validarCantidad(cantidad) {
+        if (cantidad > filasLibres.size()) {
+            self.error("la cantidad de carriles es mayor a la de filas disponibles")
+        }
+    }
+
+    method agregarCarrilesAleatorio() {
+        const filaElegida = filasLibres.anyOne()
+        filasLibres.remove(filaElegida)
+        carriles.add( new Carril( fila = filaElegida,
+								direccion = direcciones.anyOne(),
+								tiempoDeEspera = 5000 ,
+								intervaloMinimo = 300 ,
+								intervaloMaximo = 800 ,
+								tiposDeVehiculo = tiposDeVehiculo ) 
+					)
     }
 }
 
-
-
-
-
-object auto{
-    var property otroVehiculo = camion 
-
+object auto {
     method nombre() = "auto"
-
 }
 
 object camion {
-  var property otroVehiculo = auto
-
-  method nombre() = "camion"
-}
-
-
-
-
-object generadorDeVehiculos {
-    const carriles = [carrilDerecha, carrilIzquierda]
-    const filasLibres = [1, 2, 3, 4, 5, 6]
-
-    method generar(cantidad) {
-        cantidad.times({ n => self.agregarVehiculoAleatorio() }){
-            self.error("la cantidad de autos es mayor a la de carriles")
-        }
-    }
-
-    method agregarVehiculoAleatorio() {
-        const filaRandomElegida = filasLibres.anyOne()
-        filasLibres.remove(filaRandomElegida)
-
-        const carril = carriles.anyOne()
-        self.agregarEnCarril(carril)
-     
-    }
-
-    method pruebaIntervaloRandom() {
-      return 75.randomUpTo(500)
-    }
-
-
-method agregarEnCarril(carril) {
-
-   const intervalo = self.pruebaIntervaloRandom()
-        const tiposDeVehiculo = [auto, camion]
-        //intervalosPosibles.anyOne()//
-
-        carril.agregar(new Vehiculo(fila = carril, intervaloEnMs = intervalo, tipoVehiculo = tiposDeVehiculo.anyOne()))  
+    method nombre() = "camion"
 }
 
 
