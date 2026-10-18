@@ -17,6 +17,8 @@ object izquierda {
 	method puedeAvanzar(posicion) = posicion.x() > 0
 
 	method columnaInicial() = game.width() - 1
+    // en object izquierda
+    method nombre() = "izquierda"
 }
 object derecha {
     method siguiente(posicion) {
@@ -32,7 +34,11 @@ object derecha {
 	method puedeAvanzar(posicion) = posicion.x() < game.width() - 1
 
 	method columnaInicial() = 0
+    // en object derecha
+    method nombre() = "derecha"
 }
+
+
 
 class Carril {
     const direccion
@@ -51,41 +57,6 @@ class Carril {
 
 object carrilDerecha inherits Carril(direccion = derecha) {}
 object carrilIzquierda inherits Carril(direccion = izquierda) {}
-
-/*
-object generadorDeVehiculos {
-    const carriles = [carrilDerecha, carrilIzquierda]
-    const intervalosPosibles = [300, 400, 500, 600, 800, 900]
-    const filasLibres = [1, 2, 3, 4, 5, 6]
-
-    method generar(cantidad) {
-        cantidad.times({ n => self.agregarVehiculoAleatorio() })
-    }
-
-    method agregarVehiculoAleatorio() {
-        const fila = filasLibres.anyOne()
-        filasLibres.remove(fila)
-
-        const carril = carriles.anyOne()
-        const intervalo = intervalosPosibles.anyOne()
-
-        carril.agregar(new Vehiculo(fila = fila, intervaloEnMs = intervalo))
-    }
-}
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
 
 object arriba {
     method siguiente(posicion) {
@@ -152,14 +123,11 @@ object alumno {
 	}
 	method image() = "estudiante_" + aspecto.nombre() + ".png"
 }
-
 object unq {
     var property position = game.at(4,9) 
 
 	method image () = "AccesoUNQ.jpg" 
 }
-
-
 
 //=====Sector de Vida===
 //
@@ -215,11 +183,10 @@ object sinVida{
 	method cantidadDeVidas() = 0
 }
 //=====Aca finaliza===
-//
 
 
 //=====Sector de alumno===
-//
+
 object alumnoSano{
 	method nombre() = "3vidas"
 	
@@ -242,8 +209,6 @@ object alumnoFallecido{
 	method siguienteEtapa() = self
 }
 
-
-
 class Vehiculo {
     const fila
     const intervaloEnMs
@@ -251,7 +216,7 @@ class Vehiculo {
     var property position = null
     var property tipoVehiculo = auto
 
-    method image() = tipoVehiculo.nombre() + ".png"
+    method image() = tipoVehiculo.nombre() + "_" + carril.direccion().nombre() + ".png"
 
     method nombreTick() = "mover" + self.identity()
 
@@ -273,11 +238,7 @@ class Vehiculo {
             generadorDeVehiculos.agregarEnCarrilConPausa(carril, fila)
         }
     }
-}   // <- esta llave cierra la clase, y recién acá termina Vehiculo
-
-
-
-
+}  
 
 object auto{
     var property otroVehiculo = camion 
@@ -290,9 +251,6 @@ object camion {
 
   method nombre() = "camion"
 }
-
-
-
 
 object generadorDeVehiculos {
     const carriles = [carrilDerecha, carrilIzquierda]
@@ -310,10 +268,6 @@ method agregarVehiculoAleatorio() {
     self.agregarEnCarril(carriles.anyOne(), fila)
 }
 
-
-
-
-//////////////////////////////////////////
 method pausaRandom() = 500.randomUpTo(2000).truncate(0)
 
 method agregarEnCarrilConPausa(carril, fila) {
@@ -329,11 +283,5 @@ method agregarEnCarril(carril, fila) {
     ))
 }
 method intervaloRandom() = 300.randomUpTo(900).truncate(0)
-
-
-
-
-
-
 
 }	
