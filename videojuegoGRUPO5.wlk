@@ -1,7 +1,7 @@
 import wollok.game.*
 
 
-//direcciones
+/////////////////////////DIRECCIONES/////////////////////////
 object izquierda {
 
     method siguiente(posicion) {
@@ -39,7 +39,7 @@ object derecha {
 }
 
 
-
+/////////////////////////CARRIL/////////////////////////
 class Carril {
     const direccion
 
@@ -81,6 +81,7 @@ object abajo {
     }
 }
 
+/////////////////////////ALUMNO/////////////////////////
 object alumno {
     var vidaRestante = terceraVida
     var property position = game.at(4,0)
@@ -101,6 +102,7 @@ object alumno {
 		}
 		
 	}
+
 	method fueDerrotado(){
 		if(self.estaMuerto()){
 			self.anunciarDerrota()
@@ -123,14 +125,41 @@ object alumno {
 	}
 	method image() = "estudiante_" + aspecto.nombre() + ".png"
 }
+
+/////////////////////////VIDA DE ALUMNO /////////////////////////
+
+object alumnoSano{
+	method nombre() = "3vidas"
+	
+	method siguienteEtapa() = alumnoLastimado
+}
+object alumnoLastimado{
+	method nombre() = "2vidas"
+	
+	method siguienteEtapa() = alumnoMalherido
+}
+object alumnoMalherido{
+	method nombre() = "1vida"
+	
+	method siguienteEtapa() = alumnoFallecido
+}
+
+object alumnoFallecido{
+	method nombre() = "0vida"
+	
+	method siguienteEtapa() = self
+}
+
+/////////////////////////FACULTAD/////////////////////////
 object unq {
     var property position = game.at(4,9) 
 
 	method image () = "AccesoUNQ.jpg" 
 }
 
-//=====Sector de Vida===
-//
+
+
+//=====Sector de Vida=== //
 object primeraVida{
 	var property position = game.at(7,0)
 	var aspecto = self
@@ -185,30 +214,7 @@ object sinVida{
 //=====Aca finaliza===
 
 
-//=====Sector de alumno===
-
-object alumnoSano{
-	method nombre() = "3vidas"
-	
-	method siguienteEtapa() = alumnoLastimado
-}
-object alumnoLastimado{
-	method nombre() = "2vidas"
-	
-	method siguienteEtapa() = alumnoMalherido
-}
-object alumnoMalherido{
-	method nombre() = "1vida"
-	
-	method siguienteEtapa() = alumnoFallecido
-}
-
-object alumnoFallecido{
-	method nombre() = "0vida"
-	
-	method siguienteEtapa() = self
-}
-
+/////////////////////////VEHICULOS/////////////////////////
 class Vehiculo {
     const fila
     const intervaloEnMs

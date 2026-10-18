@@ -17,5 +17,10 @@ program videojuego {
     keyboard.up().onPressDo({ alumno.mover(arriba) })
     keyboard.down().onPressDo({ alumno.mover(abajo) })
 
+
+    game.addVisual(primeraVida)
+    game.addVisual(segundaVida)
+    game.addVisual(terceraVida)
+
     game.start()
 }
