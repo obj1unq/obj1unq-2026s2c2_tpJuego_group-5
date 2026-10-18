@@ -1,130 +1,7 @@
 import wollok.game.*
 
-// =====================================================================
-//  ALUMNO: PERSONAJE PRINCIPAL
-// =====================================================================
-object alumno {
-    const vidasRestantes = salud
-    var property position = game.at(4,0)
-	
-	method descontarVida(){
-		vidasRestantes.perderUnaVida()
-	}
-   
-	method serAtropellado() {
-		if (not self.estaMuerto()) {
-			self.descontarVida()
-			
-			self.volverAlInicio()
-			self.fueDerrotado()
-		}
-		
-	}
-	method fueDerrotado(){
-		if(self.estaMuerto()){
-			self.anunciarDerrota()
-		}
-	}
 
-	method anunciarDerrota() {
-		   game.say(self, "me morí") 
-	}
-
-	method volverAlInicio() { position = game.at(4,0) }
-
-	method estaMuerto() {
-		return !vidasRestantes.hayVidas()
-	}
-
-	method mover(direccion) {
-		position = direccion.siguiente(position)
-	  
-	}
-	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
-	
-	//interacciones con colisiones:
-	method interactuar(algo){
-		algo.interaccion(self)
-	}
-}
-
-// =====================================================================
-//  VIDAS DEL PERSONAJE PRINCIPAL: se encarga de modelar las vidas del PERSONAJE PRINCIPAL y
-// ademas tambien modela el aspecto que tiene el personaje segun su vida
-// =====================================================================
-class Vida{
-	var property position
-	const nombre
-	const cantidadDeVidas
-	var aspecto = conVida
-	
-	method cantidadDeVidas() = cantidadDeVidas
-	
-	method image() = aspecto.nombreDeVida(nombre) + "_vida.png"
-	
-	method marcarComoPerdida(){
-		aspecto = sinVida
-	}
-	
-	method marcarComoRecuperada(){
-		aspecto = conVida
-	}
-	
-	method estaPerdida() = aspecto.estaPerdida()
-}
-object salud {
-	//Es en orden descendente, es decir, de la vida mas alta (3) hasta la mas baja (1)
-	const vidas = [
-        new Vida(position = game.at(9,0), nombre = "tercera",   cantidadDeVidas = 3),
-        new Vida(position = game.at(8,0), nombre = "segunda",   cantidadDeVidas = 2),
-		new Vida(position = game.at(7,0), nombre = "primera",   cantidadDeVidas = 1)
-    ]
-
-    method iniciar() {
-        vidas.forEach({ vida => game.addVisual(vida) })
-    }
-
-	method cuantasVidasHay() = 
-		if (self.hayVidas()) {self.encontrarVidaNoPerdida().cantidadDeVidas()}
-		else { 0 }
-	method hayVidas() = vidas.any({vida => !vida.estaPerdida()})
-	method encontrarVidaNoPerdida() = vidas.find({vida => !vida.estaPerdida()})
-	
-	method perderUnaVida(){
-		if(self.hayVidas()){
-			self.encontrarVidaNoPerdida().marcarComoPerdida()
-		}
-	}
-	
-	method ganarUnaVida(){
-		self.validarGanarVida()
-		self.encontrarVidaPerdida().marcarComoRecuperada()
-	}
-	method validarGanarVida(){
-		if(!self.hayAlgunaVidaPerdida()){
-			self.error("Tengo las vidas llenas")
-		}
-	}
-	method hayAlgunaVidaPerdida() = vidas.any({vida => vida.estaPerdida()})
-	method encontrarVidaPerdida() = vidas.filter({vida => vida.estaPerdida()}).last()
-}
-
-//Objetos de tipo estadoDeVida que son usados por salud
-object sinVida{
-	method nombreDeVida(nombre) = "sin"
-	
-	method estaPerdida() = true
-}
-
-object conVida{
-	method nombreDeVida(nombre) = nombre
-	
-	method estaPerdida() = false
-}
-
-// =====================================================================
-//  DIRECCIONES del PERSONAJE PRINCIPAL
-// =====================================================================
+//direcciones
 object izquierda {
 
     method siguiente(posicion) {
@@ -157,31 +34,6 @@ object derecha {
 	method columnaInicial() = 0
 }
 
-object arriba {
-    method siguiente(posicion) {
-        self.validarSiguiente(posicion)
-        return posicion.up(1)
-    }
-    method validarSiguiente(posicion) {
-        if(posicion.y() == game.height() - 1 ) {
-            self.error('No se puede mover hacia arriba')
-        }
-    }
-}
-object abajo {
-    method siguiente(posicion) {
-        self.validarSiguiente(posicion)
-        return posicion.down(1)
-    }
-        method validarSiguiente(posicion) {
-        if(posicion.y() == 0 ) {
-            self.error('No se puede mover hacia abajo')
-        }
-    }
-}
-// =====================================================================
-//  CARRILES y todas las class y object que son de dominio obtaculos.
-// =====================================================================
 class Carril {
     const direccion
 
@@ -223,24 +75,174 @@ object generadorDeVehiculos {
 
 */
 
-object autoADerecha {
-    var property position = game.at(0,2) 
-	
-	method posicionInicial() = game.at(0,2) 
-	
-	method empezarARecorrer() {
-		game.onTick(800, "moverD", {self.autoMueveDerecha()})
-	}
-	method image () = "auto.png" 
 
-	method autoMueveDerecha() {
-		if (position.x() < 10){
-			position = position.right(1)
-		}else{
-			position = self.posicionInicial()
+
+
+
+
+
+
+
+
+
+
+
+object arriba {
+    method siguiente(posicion) {
+        self.validarSiguiente(posicion)
+        return posicion.up(1)
+    }
+    method validarSiguiente(posicion) {
+        if(posicion.y() == game.height() - 1 ) {
+            self.error('No se puede mover hacia arriba')
+        }
+    }
+}
+object abajo {
+    method siguiente(posicion) {
+        self.validarSiguiente(posicion)
+        return posicion.down(1)
+    }
+        method validarSiguiente(posicion) {
+        if(posicion.y() == 0 ) {
+            self.error('No se puede mover hacia abajo')
+        }
+    }
+}
+
+object alumno {
+    var vidaRestante = terceraVida
+    var property position = game.at(4,0)
+    var aspecto = alumnoSano
+	
+	method descontarVida(){
+		vidaRestante.marcarComoPerdida()
+		vidaRestante = vidaRestante.vidaInferior()
+		aspecto = aspecto.siguienteEtapa()
+	}
+   
+	method serAtropellado() {
+		if (not self.estaMuerto()) {
+			self.descontarVida()
+			
+			self.volverAlInicio()
+			self.fueDerrotado()
+		}
+		
+	}
+	method fueDerrotado(){
+		if(self.estaMuerto()){
+			self.anunciarDerrota()
 		}
 	}
+
+	method anunciarDerrota() {
+		   game.say(self, "me morí") 
+	}
+
+	method volverAlInicio() { position = game.at(4,0) }
+
+	method estaMuerto() {
+		return vidaRestante.cantidadDeVidas() == 0
+	}
+
+	method mover(direccion) {
+		position = direccion.siguiente(position)
+	  
+	}
+	method image() = "estudiante_" + aspecto.nombre() + ".png"
 }
+
+object unq {
+    var property position = game.at(4,9) 
+
+	method image () = "AccesoUNQ.jpg" 
+}
+
+
+
+//=====Sector de Vida===
+//
+object primeraVida{
+	var property position = game.at(7,0)
+	var aspecto = self
+
+	method cantidadDeVidas() = 1
+
+	method image() = aspecto.nombre() + "_vida.png"
+	method nombre() = "primera"
+
+	method marcarComoPerdida(){
+		aspecto = self.vidaInferior()
+	}
+	method vidaInferior() = sinVida	
+}
+object segundaVida{
+	var property position = game.at(8,0)
+	var aspecto = self
+
+	method cantidadDeVidas() = 2
+
+	method image() = aspecto.nombre() + "_vida.png"
+	method nombre() = "segunda"
+	
+	method marcarComoPerdida(){
+		aspecto = sinVida
+	}
+		
+	method vidaInferior() = primeraVida
+}
+object terceraVida{
+	var property position = game.at(9,0)
+	var aspecto = self
+	
+	method cantidadDeVidas() = 3
+	
+	method image() = aspecto.nombre()+"_vida.png"
+	method nombre() = "tercera"
+	
+	method marcarComoPerdida(){
+		aspecto = sinVida
+	}
+	
+	method vidaInferior() = segundaVida
+}
+object sinVida{
+	method nombre() = "sin"
+	
+	method vidaInferior() = self
+	
+	method cantidadDeVidas() = 0
+}
+//=====Aca finaliza===
+//
+
+
+//=====Sector de alumno===
+//
+object alumnoSano{
+	method nombre() = "3vidas"
+	
+	method siguienteEtapa() = alumnoLastimado
+}
+object alumnoLastimado{
+	method nombre() = "2vidas"
+	
+	method siguienteEtapa() = alumnoMalherido
+}
+object alumnoMalherido{
+	method nombre() = "1vida"
+	
+	method siguienteEtapa() = alumnoFallecido
+}
+
+object alumnoFallecido{
+	method nombre() = "0vida"
+	
+	method siguienteEtapa() = self
+}
+
+
 
 class Vehiculo {
     const fila
@@ -248,12 +250,10 @@ class Vehiculo {
     var carril = null
     var property position = null
     var property tipoVehiculo = auto
-    
 
     method image() = tipoVehiculo.nombre() + ".png"
 
-
-    
+    method nombreTick() = "mover" + self.identity()
 
     method asignarCarril(unCarril) {
         carril = unCarril
@@ -261,20 +261,19 @@ class Vehiculo {
     }
 
     method empezarARecorrer() {
-        const tick = game.tick(intervaloEnMs, { self.avanzar() }, false)
-        tick.start()
+        game.onTick(intervaloEnMs, self.nombreTick(), { self.avanzar() })
     }
 
-     method avanzar() {
+    method avanzar() {
         if (carril.direccion().puedeAvanzar(position)) {
             position = carril.direccion().siguiente(position)
         } else {
+            game.removeTickEvent(self.nombreTick())
             game.removeVisual(self)
-            generadorDeVehiculos.agregarEnCarril(carril.)
+            generadorDeVehiculos.agregarEnCarrilConPausa(carril, fila)
         }
-
     }
-}
+}   // <- esta llave cierra la clase, y recién acá termina Vehiculo
 
 
 
@@ -283,8 +282,7 @@ class Vehiculo {
 object auto{
     var property otroVehiculo = camion 
 
-    method nombre() = "auto"
-
+ method nombre() = "auto"
 }
 
 object camion {
@@ -306,35 +304,36 @@ object generadorDeVehiculos {
         }
     }
 
-    method agregarVehiculoAleatorio() {
-        const filaRandomElegida = filasLibres.anyOne()
-        filasLibres.remove(filaRandomElegida)
-
-        const carril = carriles.anyOne()
-        self.agregarEnCarril(carril)
-     
-    }
-
-    method pruebaIntervaloRandom() {
-      return 75.randomUpTo(500)
-    }
-
-
-method agregarEnCarril(carril) {
-
-   const intervalo = self.pruebaIntervaloRandom()
-        const tiposDeVehiculo = [auto, camion]
-        //intervalosPosibles.anyOne()//
-
-        carril.agregar(new Vehiculo(fila = carril, intervaloEnMs = intervalo, tipoVehiculo = tiposDeVehiculo.anyOne()))  
+method agregarVehiculoAleatorio() {
+    const fila = filasLibres.anyOne()
+    filasLibres.remove(fila)
+    self.agregarEnCarril(carriles.anyOne(), fila)
 }
 
 
-// =====================================================================
-//  META: FINAL DEL JUEGO
-// =====================================================================
-object unq {
-    var property position = game.at(4,9) 
 
-	method image () = "AccesoUNQ.jpg" 
+
+//////////////////////////////////////////
+method pausaRandom() = 500.randomUpTo(2000).truncate(0)
+
+method agregarEnCarrilConPausa(carril, fila) {
+    game.schedule(self.pausaRandom(), { self.agregarEnCarril(carril, fila) })
+}
+
+method agregarEnCarril(carril, fila) {
+    const tiposDeVehiculo = [auto, camion]
+    carril.agregar(new Vehiculo(
+        fila = fila,
+        intervaloEnMs = self.intervaloRandom(),
+        tipoVehiculo = tiposDeVehiculo.anyOne()
+    ))
+}
+method intervaloRandom() = 300.randomUpTo(900).truncate(0)
+
+
+
+
+
+
+
 }	
