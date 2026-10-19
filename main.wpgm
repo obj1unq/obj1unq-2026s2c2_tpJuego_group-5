@@ -7,10 +7,14 @@ program videojuego {
     game.height(10)
     game.cellSize(50)
 
-	generadorDeVehiculos.generar(6)
-    	
+	generadorDeCarriles.generar(6)
+    
+	salud.iniciar()
+	
 	game.addVisual(alumno)
-	//game.addVisual(unq)
+	game.addVisual(unq)
+
+	game.onCollideDo(alumno, { algo => alumno.interactuar(algo) })
 
     keyboard.left().onPressDo({ alumno.mover(izquierda) })
     keyboard.right().onPressDo({ alumno.mover(derecha) })

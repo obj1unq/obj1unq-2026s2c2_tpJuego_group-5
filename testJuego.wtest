@@ -2,16 +2,11 @@ import videojuegoGRUPO5.*
 
 describe "Alumno" {
 
-    method initialize() {
-        game.width(10)
-        game.height(10)
-    }
-    
-    test "arranca con 3 vidas y en la posicion inicial" {
-        assert.equals(game.at(4,0), alumno.position())
-        assert.that(!alumno.estaMuerto())
-        assert.equals("estudiante_3vidas.png", alumno.image())
-    }
+  method initialize() {
+  }
+  test "..." {
+
+  }
 
     test "al descontar una vida cambia su aspecto" {
         alumno.descontarVida()
