@@ -4,14 +4,11 @@ import wollok.game.*
 //  ALUMNO: PERSONAJE PRINCIPAL
 // =====================================================================
 object alumno {
-    var vidaRestante = terceraVida
+    const vidasRestantes = salud
     var property position = game.at(4,0)
-    var aspecto = alumnoSano
 	
 	method descontarVida(){
-		vidaRestante.marcarComoPerdida()
-		vidaRestante = vidaRestante.vidaInferior()
-		aspecto = aspecto.siguienteEtapa()
+		vidasRestantes.perderUnaVida()
 	}
    
 	method serAtropellado() {
@@ -23,7 +20,6 @@ object alumno {
 		}
 		
 	}
-
 	method fueDerrotado(){
 		if(self.estaMuerto()){
 			self.anunciarDerrota()
@@ -37,38 +33,19 @@ object alumno {
 	method volverAlInicio() { position = game.at(4,0) }
 
 	method estaMuerto() {
-		return vidaRestante.cantidadDeVidas() == 0
+		return !vidasRestantes.hayVidas()
 	}
 
 	method mover(direccion) {
 		position = direccion.siguiente(position)
 	  
 	}
-	method image() = "estudiante_" + aspecto.nombre() + ".png"
-}
-
-/////////////////////////VIDA DE ALUMNO /////////////////////////
-
-object alumnoSano{
-	method nombre() = "3vidas"
+	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
 	
-	method siguienteEtapa() = alumnoLastimado
-}
-object alumnoLastimado{
-	method nombre() = "2vidas"
-	
-	method siguienteEtapa() = alumnoMalherido
-}
-object alumnoMalherido{
-	method nombre() = "1vida"
-	
-	method siguienteEtapa() = alumnoFallecido
-}
-
-object alumnoFallecido{
-	method nombre() = "0vida"
-	
-	method siguienteEtapa() = self
+	//interacciones con colisiones:
+	method interactuar(algo){
+		algo.interaccion(self)
+	}
 }
 
 // =====================================================================
@@ -88,24 +65,51 @@ class Vida{
 	method marcarComoPerdida(){
 		aspecto = sinVida
 	}
-		
-	method vidaInferior() = primeraVida
-}
-object terceraVida{
-	var property position = game.at(9,0)
-	var aspecto = self
 	
-	method cantidadDeVidas() = 3
-	
-	method image() = aspecto.nombre()+"_vida.png"
-	method nombre() = "tercera"
-	
-	method marcarComoPerdida(){
-		aspecto = sinVida
+	method marcarComoRecuperada(){
+		aspecto = conVida
 	}
 	
-	method vidaInferior() = segundaVida
+	method estaPerdida() = aspecto.estaPerdida()
 }
+object salud {
+	//Es en orden descendente, es decir, de la vida mas alta (3) hasta la mas baja (1)
+	const vidas = [
+        new Vida(position = game.at(9,0), nombre = "tercera",   cantidadDeVidas = 3),
+        new Vida(position = game.at(8,0), nombre = "segunda",   cantidadDeVidas = 2),
+		new Vida(position = game.at(7,0), nombre = "primera",   cantidadDeVidas = 1)
+    ]
+
+    method iniciar() {
+        vidas.forEach({ vida => game.addVisual(vida) })
+    }
+
+	method cuantasVidasHay() = 
+		if (self.hayVidas()) {self.encontrarVidaNoPerdida().cantidadDeVidas()}
+		else { 0 }
+	method hayVidas() = vidas.any({vida => !vida.estaPerdida()})
+	method encontrarVidaNoPerdida() = vidas.find({vida => !vida.estaPerdida()})
+	
+	method perderUnaVida(){
+		if(self.hayVidas()){
+			self.encontrarVidaNoPerdida().marcarComoPerdida()
+		}
+	}
+	
+	method ganarUnaVida(){
+		self.validarGanarVida()
+		self.encontrarVidaPerdida().marcarComoRecuperada()
+	}
+	method validarGanarVida(){
+		if(!self.hayAlgunaVidaPerdida()){
+			self.error("Tengo las vidas llenas")
+		}
+	}
+	method hayAlgunaVidaPerdida() = vidas.any({vida => vida.estaPerdida()})
+	method encontrarVidaPerdida() = vidas.filter({vida => vida.estaPerdida()}).last()
+}
+
+//Objetos de tipo estadoDeVida que son usados por salud
 object sinVida{
 	method nombreDeVida(nombre) = "sin"
 	
@@ -211,7 +215,6 @@ class Carril {
 	method intervaloEnMsAleatorio() = intervaloMinimo.randomUpTo(intervaloMaximo).truncate(0)
 }
 
-/////////////////////////VEHICULOS/////////////////////////
 class Vehiculo {
     const carril
     const intervaloEnMs
