@@ -1,6 +1,6 @@
 import videojuegoGRUPO5.*
 
-describe "group of tests for pepita" {
+describe "Alumno" {
 
   method initialize() {
   }
@@ -8,4 +8,90 @@ describe "group of tests for pepita" {
 
   }
 
+    test "al descontar una vida cambia su aspecto" {
+        alumno.descontarVida()
+        assert.equals("estudiante_2vidas.png", alumno.image())
+        assert.that(!alumno.estaMuerto())
+    }
+
+    test "con tres vidas descontadas esta muerto" {
+        alumno.descontarVida()
+        alumno.descontarVida()
+        alumno.descontarVida()
+        assert.that(alumno.estaMuerto())
+    }
+
+    test "al ser atropellado vuelve al inicio y pierde una vida" {
+        alumno.mover(arriba)
+        alumno.mover(arriba)
+        alumno.serAtropellado()
+        assert.equals(game.at(4,0), alumno.position())
+        assert.equals("estudiante_2vidas.png", alumno.image())
+    }
+
+    test "se mueve hacia la derecha" {
+        alumno.mover(derecha)
+        assert.equals(game.at(5,0), alumno.position())
+    }
+
+    test "no puede moverse hacia abajo desde la fila 0" {
+        assert.throwsException({ alumno.mover(abajo) })
+    }
+}
+
+describe "Vidas" {
+
+    test "la tercera vida perdida muestra la imagen sin vida" {
+        assert.equals("tercera_vida.png", terceraVida.image())
+        terceraVida.marcarComoPerdida()
+        assert.equals("sin_vida.png", terceraVida.image())
+    }
+
+    test "la vida inferior de la tercera es la segunda" {
+        assert.equals(segundaVida, terceraVida.vidaInferior())
+    }
+
+    test "sin vida no tiene vidas" {
+        assert.equals(0, sinVida.cantidadDeVidas())
+    }
+}
+
+describe "Direcciones y vehiculos" {
+
+    method initialize() {
+        game.width(10)
+        game.height(10)
+    }
+
+    test "la izquierda puede avanzar si no esta en la columna 0" {
+        assert.that(izquierda.puedeAvanzar(game.at(3,1)))
+        assert.notThat(izquierda.puedeAvanzar(game.at(0,1)))
+    }
+
+    test "la derecha no puede avanzar en la ultima columna" {
+        assert.notThat(derecha.puedeAvanzar(game.at(9,1)))
+    }
+
+    test "el carril izquierdo arranca en la ultima columna" {
+        assert.equals(game.at(9,3), carrilIzquierda.posicionInicial(3))
+    }
+
+    test "un vehiculo asignado a un carril arranca en su posicion inicial" {
+        const v = new Vehiculo(fila = 2, intervaloEnMs = 500)
+        v.asignarCarril(carrilDerecha)
+        assert.equals(game.at(0,2), v.position())
+    }
+
+    test "un vehiculo avanza una celda en su direccion" {
+        const v = new Vehiculo(fila = 2, intervaloEnMs = 500)
+        v.asignarCarril(carrilDerecha)
+        v.avanzar()
+        assert.equals(game.at(1,2), v.position())
+    }
+
+    test "la imagen depende del tipo y de la direccion" {
+        const v = new Vehiculo(fila = 2, intervaloEnMs = 500, tipoVehiculo = camion)
+        v.asignarCarril(carrilIzquierda)
+        assert.equals("camion_izquierda.png", v.image())
+    }
 }
