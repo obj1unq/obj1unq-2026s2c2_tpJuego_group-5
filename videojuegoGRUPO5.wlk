@@ -140,6 +140,8 @@ object izquierda {
 	method puedeAvanzar(posicion) = posicion.x() > 0
 
 	method columnaInicial() = game.width() - 1
+	
+	method nombre() = "izquierda"
 }
 object derecha {
     method siguiente(posicion) {
@@ -155,6 +157,8 @@ object derecha {
 	method puedeAvanzar(posicion) = posicion.x() < game.width() - 1
 
 	method columnaInicial() = 0
+	
+	method nombre() = "derecha"
 }
 
 object arriba {
@@ -222,7 +226,7 @@ class Vehiculo {
 	var property position = carril.posicionInicial()
     const tick = game.tick(intervaloEnMs, { self.avanzar() }, false)
 
-    method image() = tipo.nombre() + ".png"
+    method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
 
     method empezarARecorrer() { tick.start() }
 
@@ -263,7 +267,7 @@ object generadorDeCarriles {
         filasLibres.remove(filaElegida)
         carriles.add( new Carril( fila = filaElegida,
 								direccion = direcciones.anyOne(),
-								tiempoDeEspera = 5000 ,
+								tiempoDeEspera = 3000 ,
 								intervaloMinimo = 300 ,
 								intervaloMaximo = 800 ,
 								tiposDeVehiculo = tiposDeVehiculo ) 
