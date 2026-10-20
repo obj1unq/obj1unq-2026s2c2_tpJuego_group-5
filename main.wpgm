@@ -1,0 +1,25 @@
+import wollok.game.*
+import videojuegoGRUPO5.*
+
+program videojuego {
+
+    game.width(10)
+    game.height(10)
+    game.cellSize(50)
+
+	generadorDeCarriles.generar(6)
+    
+	salud.iniciar()
+	
+	game.addVisual(alumno)
+	game.addVisual(unq)
+
+	game.onCollideDo(alumno, { algo => alumno.interactuar(algo) })
+
+    keyboard.left().onPressDo({ alumno.mover(izquierda) })
+    keyboard.right().onPressDo({ alumno.mover(derecha) })
+    keyboard.up().onPressDo({ alumno.mover(arriba) })
+    keyboard.down().onPressDo({ alumno.mover(abajo) })
+
+    game.start()
+}

@@ -1,10 +1,10 @@
+<<<<<<< HEAD
+/bin/
+*.html
 
-# Local history
-.history
+=======
+/bin/
+*.html
 
-# Wollok Log
-log
+>>>>>>> 5613098a73318c695bcfd7df52b63705499b6fd4
 *.log
-
-# Dependencies
-node_modules
