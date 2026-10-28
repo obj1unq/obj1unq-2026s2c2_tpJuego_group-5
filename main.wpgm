@@ -6,8 +6,8 @@ program videojuego {
     game.width(10)
     game.height(10)
     game.cellSize(50)
-
-	generadorDeCarriles.generar(6)
+    game.boardGround("fondo_unq.png")
+	generadorDeCarriles.generar(4)
     
 	salud.iniciar()
 	
