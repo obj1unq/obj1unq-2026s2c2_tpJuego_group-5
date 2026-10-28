@@ -192,7 +192,7 @@ class Carril {
 	const property tiempoDeEspera
 	const intervaloMinimo 
     const intervaloMaximo 
-    const tiposDeVehiculo 
+    const tiposDeVehiculo = #{Auto, Moto, Camion }
 
 
     method posicionInicial() = game.at(direccion.columnaInicial(), fila)
@@ -221,12 +221,11 @@ class Carril {
 
 class Vehiculo {
     const carril
-    const intervaloEnMs
-    const tipo
+    var property intervaloEnMs = 0
 	var property position = carril.posicionInicial()
-    const tick = game.tick(intervaloEnMs, { self.avanzar() }, false)
+    const tick = game.tick(self.intervaloEnMs(), { self.avanzar() }, false)
 
-    method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+    method image() 
 
     method empezarARecorrer() { tick.start() }
 
@@ -243,6 +242,29 @@ class Vehiculo {
 		alumno.serAtropellado()
 	}
 }
+
+class Auto inherits Vehiculo{
+	const tipo = auto
+
+	override method intervaloEnMs() = 300
+
+	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+}
+
+class Moto inherits Vehiculo{
+const tipo = moto
+
+override method intervaloEnMs() = 100
+override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+}
+
+class Camion inherits Vehiculo{
+	const tipo = camion
+	override method intervaloEnMs() = 800
+	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+
+}
+
 
 object generadorDeCarriles {
     const direcciones = [derecha, izquierda]
@@ -282,6 +304,12 @@ object auto {
 object camion {
     method nombre() = "camion"
 }
+
+object moto {
+	method nombre() = "moto"
+}
+
+
 
 
 // =====================================================================
