@@ -1,5 +1,7 @@
 import wollok.game.*
 import videojuegoGRUPO5.*
+import vida.*   
+import direccion.*
 
 program videojuego {
 
