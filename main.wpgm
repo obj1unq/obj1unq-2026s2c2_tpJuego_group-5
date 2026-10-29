@@ -12,7 +12,7 @@ program videojuego {
 	salud.iniciar()
 	
 	game.addVisual(alumno)
-	game.addVisual(unq)
+	game.addVisual(unq_Puerta)
 
 	game.onCollideDo(alumno, { algo => alumno.interactuar(algo) })
 

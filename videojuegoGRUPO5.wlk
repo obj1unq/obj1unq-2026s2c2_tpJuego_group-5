@@ -330,8 +330,12 @@ object colectivo {
 // =====================================================================
 //  META: FINAL DEL JUEGO
 // =====================================================================
-object unq {
-    var property position = game.at(4,9) 
-
-	method image () = "AccesoUNQ.jpg" 
+object unq_Puerta {
+    var property position = game.at(4,7) 
+	    
+	method interaccion(alumno) {
+        game.say(alumno, "¡Llegué a la UNQ!")
+        // acá va lo que querés que pase: ganar el juego, pasar de nivel, etc.
+        // game.stop()
 }	
+}
