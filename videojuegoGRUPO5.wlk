@@ -220,7 +220,7 @@ class Carril {
 
 object generadorDeCarriles {
     const direcciones = [derecha, izquierda]
-    const tiposDeVehiculo = [auto, camion, moto]
+    const tiposDeVehiculo = [auto, camion, moto, colectivo]
     const filasLibres = [1, 2, 3, 4  ]
 	const carriles = []
 
@@ -293,10 +293,15 @@ class Camion inherits Vehiculo{
 	const tipo = camion
 	override method intervaloEnMs() = 800
 	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
-	
-
 }
 
+class Colectivo inherits Vehiculo{
+	const tipo = colectivo
+
+	override method intervaloEnMs() = 500
+
+	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+}
 
 
 object auto {
@@ -315,7 +320,11 @@ object moto {
 	method crearVehiculo(carril) = new Moto(carril = carril)
 }
 
+object colectivo {
+	method nombre() = "colectivo"
 
+	method crearVehiculo(carril) = new Colectivo(carril = carril)
+}
 
 
 // =====================================================================
