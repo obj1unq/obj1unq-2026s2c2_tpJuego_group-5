@@ -11,8 +11,8 @@ object alumno {
 		vidasRestantes.perderUnaVida()
 	}
    
-	method serAtropellado() {
-		if (not self.estaMuerto()) {
+	method serAtropelladoPorVehiculo() {
+		if (!self.estaMuerto()) {
 			self.descontarVida()
 			
 			self.volverAlInicio()
@@ -184,7 +184,7 @@ object abajo {
     }
 }
 // =====================================================================
-//  CARRILES y todas las class y object que son de dominio obtaculos.
+//  CARRILES 
 // =====================================================================
 class Carril {
 	const property fila
@@ -192,83 +192,35 @@ class Carril {
 	const property tiempoDeEspera
 	const intervaloMinimo 
     const intervaloMaximo 
-    const tiposDeVehiculo = #{Auto, Moto, Camion }
+    const tiposDeVehiculo 
 
 
     method posicionInicial() = game.at(direccion.columnaInicial(), fila)
 	
     method iniciarViaje() {
-		const vehiculo = self.agregarVehiculoNuevo()
-        game.addVisual(vehiculo)
-        vehiculo.empezarARecorrer()
+		const vehiculoDeViaje = self.agregarVehiculoNuevo()
+        game.addVisual(vehiculoDeViaje)
+        vehiculoDeViaje.empezarARecorrer()
     }
 	
-	method retirarVehiculo(vehiculo){
-		game.removeVisual(vehiculo)
+	method retirarVehiculo(vehiculoDeViaje){
+		game.removeVisual(vehiculoDeViaje)
 		game.schedule(tiempoDeEspera, { => self.iniciarViaje() })
 	}
 	
 	method agregarVehiculoNuevo(){
-		return
-			new Vehiculo(
-				carril = self ,
-				intervaloEnMs = self.intervaloEnMsAleatorio(),
-				tipo = tiposDeVehiculo.anyOne() )
+		const vehiculoAGenerar = tiposDeVehiculo.anyOne()
+		return vehiculoAGenerar.crearVehiculo(self)
+
 	}
 	
 	method intervaloEnMsAleatorio() = intervaloMinimo.randomUpTo(intervaloMaximo).truncate(0)
 }
 
-class Vehiculo {
-    const carril
-    var property intervaloEnMs = 0
-	var property position = carril.posicionInicial()
-    const tick = game.tick(self.intervaloEnMs(), { self.avanzar() }, false)
-
-    method image() 
-
-    method empezarARecorrer() { tick.start() }
-
-    method avanzar() {
-        if (carril.direccion().puedeAvanzar(position)) {
-            position = carril.direccion().siguiente(position)
-        } else {
-			tick.stop()
-			carril.retirarVehiculo(self)
-        }
-    }
-	
-	method interaccion(alumno){
-		alumno.serAtropellado()
-	}
-}
-
-class Auto inherits Vehiculo{
-	const tipo = auto
-
-	override method intervaloEnMs() = 300
-
-	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
-}
-
-class Moto inherits Vehiculo{
-const tipo = moto
-
-override method intervaloEnMs() = 100
-override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
-}
-
-class Camion inherits Vehiculo{
-	const tipo = camion
-	override method intervaloEnMs() = 800
-	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
-
-}
-
 
 object generadorDeCarriles {
     const direcciones = [derecha, izquierda]
-    const tiposDeVehiculo = [auto, camion]
+    const tiposDeVehiculo = [auto, camion, moto]
     const filasLibres = [1, 2, 3, 4  ]
 	const carriles = []
 
@@ -296,17 +248,71 @@ object generadorDeCarriles {
 					)
     }
 }
+// VEHICULOS
+
+class Vehiculo {
+    const property carril
+    var property intervaloEnMs = 0
+	var property position = carril.posicionInicial()
+    const tick = game.tick(self.intervaloEnMs(), { self.avanzar() }, false)
+
+    method image() 
+
+    method empezarARecorrer() { tick.start() }
+
+    method avanzar() {
+        if (carril.direccion().puedeAvanzar(position)) {
+            position = carril.direccion().siguiente(position)
+        } else {
+			tick.stop()
+			carril.retirarVehiculo(self)
+        }
+    }
+	
+	method interaccion(alumno){
+		alumno.serAtropelladoPorVehiculo()
+	}
+}
+
+class Auto inherits Vehiculo{
+	const tipo = auto
+
+	override method intervaloEnMs() = 300
+
+	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+}
+
+class Moto inherits Vehiculo{
+const tipo = moto
+
+override method intervaloEnMs() = 100
+override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+}
+
+class Camion inherits Vehiculo{
+	const tipo = camion
+	override method intervaloEnMs() = 800
+	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+	
+
+}
+
+
 
 object auto {
     method nombre() = "auto"
+	method crearVehiculo(carril) = new Auto(carril = carril)
 }
 
 object camion {
     method nombre() = "camion"
+	method crearVehiculo(carril) = new Camion(carril=carril)
 }
 
 object moto {
 	method nombre() = "moto"
+
+	method crearVehiculo(carril) = new Moto(carril = carril)
 }
 
 
