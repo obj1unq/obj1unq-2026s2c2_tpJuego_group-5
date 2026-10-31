@@ -1,10 +1,17 @@
+import videojuegoGRUPO5.*
+/*=====================================================================
+  VEHICULO: clase abstracta que representa un vehiculo en el juego.
+  ====================================================================*/
+
 class Vehiculo {
-    const property carril
-    var property intervaloEnMs = 0
-	var property position = carril.posicionInicial()
+    const carril
+    var property position = carril.posicionInicial()
     const tick = game.tick(self.intervaloEnMs(), { self.avanzar() }, false)
 
-    method image() 
+    method intervaloEnMs()
+    method nombre()
+
+    method image() = self.nombre() + "_" + carril.direccion().nombre() + ".png"
 
     method empezarARecorrer() { tick.start() }
 
@@ -12,64 +19,33 @@ class Vehiculo {
         if (carril.direccion().puedeAvanzar(position)) {
             position = carril.direccion().siguiente(position)
         } else {
-			tick.stop()
-			carril.retirarVehiculo(self)
+            tick.stop()
+            carril.retirarVehiculoYComenzarNuevoViaje(self)
         }
     }
-	
-	method interaccion(alumno){
-		alumno.serAtropelladoPorVehiculo()
-	}
+
+    //mensaje de colisión contra el alumno
+    method interaccion(atropellado) {
+        atropellado.serAtropelladoPorVehiculo()
+    }
 }
 
-class Auto inherits Vehiculo{
-	const tipo = auto
-
-	override method intervaloEnMs() = 300
-
-	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+class Auto inherits Vehiculo {
+    override method intervaloEnMs() = 300
+    override method nombre() = "auto"
 }
 
-class Moto inherits Vehiculo{
-const tipo = moto
-
-override method intervaloEnMs() = 100
-override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+class Moto inherits Vehiculo {
+    override method intervaloEnMs() = 100
+    override method nombre() = "moto"
 }
 
-class Camion inherits Vehiculo{
-	const tipo = camion
-	override method intervaloEnMs() = 800
-	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
+class Camion inherits Vehiculo {
+    override method intervaloEnMs() = 800
+    override method nombre() = "camion"
 }
 
-class Colectivo inherits Vehiculo{
-	const tipo = colectivo
-
-	override method intervaloEnMs() = 500
-
-	override method image() = tipo.nombre() + "_" + carril.direccion().nombre() +".png"
-}
-
-
-object auto {
-    method nombre() = "auto"
-	method crearVehiculo(carril) = new Auto(carril = carril)
-}
-
-object camion {
-    method nombre() = "camion"
-	method crearVehiculo(carril) = new Camion(carril=carril)
-}
-
-object moto {
-	method nombre() = "moto"
-
-	method crearVehiculo(carril) = new Moto(carril = carril)
-}
-
-object colectivo {
-	method nombre() = "colectivo"
-
-	method crearVehiculo(carril) = new Colectivo(carril = carril)
+class Colectivo inherits Vehiculo {
+    override method intervaloEnMs() = 500
+    override method nombre() = "colectivo"
 }

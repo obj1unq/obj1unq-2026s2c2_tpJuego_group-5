@@ -21,6 +21,11 @@ class Vida{
 	}
 	
 	method estaPerdida() = aspecto.estaPerdida()
+
+	//mensaje de colisión contra el alumno
+	method interaccion(alumno) {
+        alumno.paraDespues()
+    }
 }
 object salud {
 	//Es en orden descendente, es decir, de la vida mas alta (3) hasta la mas baja (1)
