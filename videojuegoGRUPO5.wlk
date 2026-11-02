@@ -40,7 +40,7 @@ object alumno {
 	}
 
 	method mover(direccion) {
-		position = direccion.siguiente(position)
+		position = direccion.siguienteParaAlumno(self)
 	  
 	}
 	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
@@ -48,80 +48,91 @@ object alumno {
 	//interacciones con colisiones:
 	method interactuar(algo){
 		algo.interaccion(self)
-	}
+    }
+    //interaccion con vehiculo: serAtropelladoPorVehiculo
+
+    //interaccion con vida:
+    method paraDespues(){}
 }
 
 // =====================================================================
 //  CARRILES 
 // =====================================================================
 class Carril {
-	const property fila
+    const fila
     const property direccion
-	const property tiempoDeEspera
-	const intervaloMinimo 
-    const intervaloMaximo 
-    const tiposDeVehiculo 
-
+    const tiempoDeEspera
+    const generadorDeVehiculos = fabricaDeVehiculos
 
     method posicionInicial() = game.at(direccion.columnaInicial(), fila)
-	
+
     method iniciarViaje() {
-		const vehiculoDeViaje = self.agregarVehiculoNuevo()
-        game.addVisual(vehiculoDeViaje)
-        vehiculoDeViaje.empezarARecorrer()
+        const vehiculo = generadorDeVehiculos.nuevoVehiculoPara(self)
+        game.addVisual(vehiculo)
+        vehiculo.empezarARecorrer()
     }
-	
-	method retirarVehiculo(vehiculoDeViaje){
-		game.removeVisual(vehiculoDeViaje)
-		game.schedule(tiempoDeEspera, { => self.iniciarViaje() })
-	}
-	
-	method agregarVehiculoNuevo(){
-		const vehiculoAGenerar = tiposDeVehiculo.anyOne()
-		return vehiculoAGenerar.crearVehiculo(self)
 
-	}
-	
-	method intervaloEnMsAleatorio() = intervaloMinimo.randomUpTo(intervaloMaximo).truncate(0)
+    method retirarVehiculoYComenzarNuevoViaje(vehiculo) {
+        game.removeVisual(vehiculo)
+        game.schedule(tiempoDeEspera, { => self.iniciarViaje() })
+    }
 }
-
 
 object generadorDeCarriles {
     const direcciones = [derecha, izquierda]
-    const tiposDeVehiculo = [auto, camion, moto, colectivo]
-    const filasLibres = [1, 2, 3, 4  ]
-	const carriles = []
+    const filasDisponibles = [1, 2, 3, 4]
+    const tiempoDeEspera = 3000 // 3 segundos
+    const carriles = []
 
     method generar(cantidad) {
         self.validarCantidad(cantidad)
-        cantidad.times({ n => self.agregarCarrilesAleatorio() })
-		carriles.forEach( {carril => carril.iniciarViaje()})
+        cantidad.times({ n => self.procesoDeGenerar()})
+        carriles.forEach({ carril => carril.iniciarViaje() })
     }
 
     method validarCantidad(cantidad) {
-        if (cantidad > filasLibres.size()) {
+        if (cantidad > filasDisponibles.size()) {
             self.error("la cantidad de carriles es mayor a la de filas disponibles")
         }
     }
 
-    method agregarCarrilesAleatorio() {
-        const filaElegida = filasLibres.anyOne()
-        filasLibres.remove(filaElegida)
-        carriles.add( new Carril( fila = filaElegida,
-								direccion = direcciones.anyOne(),
-								tiempoDeEspera = 3000 ,
-								intervaloMinimo = 300 ,
-								intervaloMaximo = 800 ,
-								tiposDeVehiculo = tiposDeVehiculo ) 
-					)
+
+    method procesoDeGenerar(){
+        const fila = filasDisponibles.first()
+        carriles.add(self.nuevoCarrilEnFila(fila))
+        filasDisponibles.remove(fila)
+    }
+    method nuevoCarrilEnFila(fila) {
+        return new Carril(
+            fila = fila,
+            direccion = direcciones.anyOne(),
+            tiempoDeEspera = tiempoDeEspera
+        )
     }
 }
 
+object fabricaDeVehiculos {
+    const fabricas = [fabricaDeAutos, fabricaDeMotos, fabricaDeColectivos, fabricaDeCamiones]
+
+    method nuevoVehiculoPara(carril) = fabricas.anyOne().nuevoVehiculoPara(carril)
+}
+object fabricaDeAutos {
+    method nuevoVehiculoPara(carril) = new Auto(carril = carril)
+}
+object fabricaDeMotos {
+    method nuevoVehiculoPara(carril) = new Moto(carril = carril)
+}
+object fabricaDeColectivos {
+    method nuevoVehiculoPara(carril) = new Colectivo(carril = carril)
+}
+object fabricaDeCamiones {
+    method nuevoVehiculoPara(carril) = new Camion(carril = carril)
+}
 // =====================================================================
 //  META: FINAL DEL JUEGO
 // =====================================================================
 object unq_Puerta {
-    var property position = game.at(4,7) 
+    var property position = game.at(5,6) 
 	    
 	method interaccion(alumno) {
         game.say(alumno, "¡Llegué a la UNQ!")

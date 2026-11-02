@@ -9,6 +9,8 @@ program videojuego {
     game.height(10)
     game.cellSize(50)
     game.boardGround("fondo_unq.png")
+    game.title("Cruzar la Carretera")
+
 	generadorDeCarriles.generar(4)
     
 	salud.iniciar()
@@ -22,6 +24,8 @@ program videojuego {
     keyboard.right().onPressDo({ alumno.mover(derecha) })
     keyboard.up().onPressDo({ alumno.mover(arriba) })
     keyboard.down().onPressDo({ alumno.mover(abajo) })
+
+
 
     game.start()
 }
