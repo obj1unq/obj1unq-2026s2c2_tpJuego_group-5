@@ -1,9 +1,7 @@
+
 {
-    "name": "empty-game",
-    "version": "1.0.0",
-    "resourceFolder": "assets",
-  "wollokVersion": "4.2.3",
-    "author": "leo",
-    "license": "ISC"
-  }
-  
+  "name": "granjavilla",
+  "version": "1.0.0",
+  "resourceFolder": "assets",
+  "wollokVersion": "4.0.0"
+}
