@@ -2,6 +2,7 @@ import wollok.game.*
 import vida.*
 import vehiculo.*
 import direccion.*
+import estado.*
 
 // =====================================================================
 //  ALUMNO: PERSONAJE PRINCIPAL
@@ -26,11 +27,13 @@ object alumno {
 	}
 	method fueDerrotado(){
 		if(self.estaMuerto()){
+            estado = muerto
 			self.anunciarDerrota()
 		}
 	}
 
 	method anunciarDerrota() {
+            
 		   game.say(self, "me morí") 
 	}
 
@@ -42,9 +45,8 @@ object alumno {
 
 	method mover(direccion) {
         estado.mover(self, direccion)
-		position = direccion.siguienteParaAlumno(self)
+    }
 	  
-	}
 	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
 	
 	//interacciones con colisiones:
