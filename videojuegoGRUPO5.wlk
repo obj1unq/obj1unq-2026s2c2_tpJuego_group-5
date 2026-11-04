@@ -9,6 +9,7 @@ import direccion.*
 object alumno {
     const vidasRestantes = salud
     var property position = game.at(4,0)
+    var property estado = vivo
 	
 	method descontarVida(){
 		vidasRestantes.perderUnaVida()
@@ -40,6 +41,7 @@ object alumno {
 	}
 
 	method mover(direccion) {
+        estado.mover(self, direccion)
 		position = direccion.siguienteParaAlumno(self)
 	  
 	}
