@@ -10,8 +10,12 @@ import estado.*
 object alumno {
     const vidasRestantes = salud
     var property position = game.at(4,0)
-    var property estado = vivo
+    var estado = vivo
 	
+    method estado() = estado
+    method estaVivo() = estado.estaVivo()
+
+
 	method descontarVida(){
 		vidasRestantes.perderUnaVida()
 	}
