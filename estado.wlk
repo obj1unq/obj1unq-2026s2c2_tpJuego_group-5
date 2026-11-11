@@ -11,6 +11,7 @@ class EstadoPersonaje{
     method vidaActual()
     method cuantasVidasHay() = vida.cuantasVidasHay()
     method opuesto()
+	method reiniciar()
 }
 
 object vivo inherits EstadoPersonaje {
@@ -25,7 +26,7 @@ object vivo inherits EstadoPersonaje {
     override method estaVivo() = true
     override method opuesto() = muerto
 
-    method reiniciar() {
+    override method reiniciar() {
         vida.recuperarTodas()
     }
 }
@@ -39,6 +40,10 @@ object muerto inherits EstadoPersonaje {
 
     override method estaVivo() = false
     override method opuesto() = vivo
+	override method reiniciar(){
+		alumno.estado(vivo)
+		vida.recuperarTodas()
+	}
 }
 
 

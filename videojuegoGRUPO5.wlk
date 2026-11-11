@@ -6,14 +6,15 @@ import estado.*
 // =====================================================================
 //  ALUMNO: PERSONAJE PRINCIPAL
 // =====================================================================
+
+
 object alumno {
     var property position = game.at(4,0)
     var estado = vivo
 	
+    method estado(_estado)  {estado =  _estado}  
     method image() = "estudiante_" + estado.cuantasVidasHay() + "vida.png"
 	
-    method estaVivo() = estado.estaVivo()
-
     method descontarVida(){
 		estado.vidaActual()
 	}
@@ -29,12 +30,9 @@ object alumno {
         estado.mover(self, direccion)
     }
 	
-    method derrotado(){estado = estado.opuesto()} 
+    method derrotado(){estado = muerto} 
 
     method reinicio() {
-        if (!self.estaVivo()){
-            estado = estado.opuesto()
-        }
         estado.reiniciar()
         self.volverAlInicio()
     }
