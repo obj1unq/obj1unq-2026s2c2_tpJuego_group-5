@@ -10,7 +10,7 @@ Un estudiante tiene que cruzar una carretera muy transitada para llegar a la uni
 
 El jugador controla a un alumno que empieza en la parte inferior del tablero. Su objetivo es **llegar a la puerta de la UNQ**, ubicada del otro lado de la carretera, atravesando los carriles sin que lo atropelle ningún vehículo.
 
-Cada vez que un vehículo choca contra el alumno, tiene una interacción distinta segun el tipo de vehículo que sea, la cual es detallada en la sección Obstáculos.
+Cada vez que un vehículo choca contra el alumno, tiene una interacción segun el tipo de vehículo que sea, la cual es detallada en la sección Obstáculos.
 
 ---
 
@@ -31,19 +31,19 @@ Es el único personaje que controla el jugador.
 
 Los obstáculos son vehículos que recorren los carriles de lado a lado. Hay cuatro tipos, cada uno con su propia velocidad:
 
-| Vehículo | Velocidad |
-|---|---|
-| 🏍️ Moto | La más rápida |
-| 🚗 Auto | Rápida |
-| 🚌 Colectivo | Media |
-| 🚛 Camión | La más lenta |
+| Vehículo | Velocidad | Daño 
+|---|---| --- |
+| 🏍️ Moto | La más rápida | 1 |
+| 🚗 Auto | Rápida | 1 |
+| 🚌 Colectivo | Media | 2 |
+| 🚛 Camión | La más lenta | 2 |
 
 **Cómo se comportan:**
 
-- La carretera está formada por varios **carriles**. Cada carril tiene su propia fila en el tablero y su propia dirección: unos van hacia la derecha y otros hacia la izquierda, y se sortean al iniciar el juego.
+- La carretera está formada por varios **carriles**. Cada carril tiene su propia fila en el tablero y su propia dirección: unos van hacia la derecha y otros hacia la izquierda.
 - Cada vehículo avanza celda por celda hasta llegar al borde del tablero y desaparece.
 - Después de unos segundos de espera, el carril genera un **nuevo vehículo de un tipo elegido al azar**, así que el tráfico nunca es igual dos veces.
-- Si un vehículo toca al alumno, este es atropellado y pierde una vida.
+- Si un vehículo toca al alumno, este es atropellado y pierde una vida o 2 vidas.
 
 ---
 
@@ -58,38 +58,12 @@ Los obstáculos son vehículos que recorren los carriles de lado a lado. Hay cua
 
 ---
 
-## 🗂️ Estructura del proyecto
-
-| Archivo | Contenido |
-|---|---|
-| `main.wpgm` | Programa principal: configura el tablero, agrega los objetos y registra las teclas |
-| `videojuegoGRUPO5.wlk` | Alumno, carriles, generadores y la meta (puerta de la UNQ) |
-| `vehiculo.wlk` | Clase `Vehiculo` y sus subclases: `Auto`, `Moto`, `Colectivo` y `Camion` |
-| `vida.wlk` | Las vidas del alumno |
-| `direccion.wlk` | Direcciones de movimiento (`derecha`, `izquierda`, `arriba`, `abajo`) |
-| `assets/` | Imágenes del juego |
-| `testJuego.wtest` | Tests |
-
----
-
-## 🧠 Conceptos de Programación con Objetos aplicados
-
-- **Clases y herencia:** `Vehiculo` es una clase abstracta de la que heredan `Auto`, `Moto`, `Colectivo` y `Camion`; cada subclase define su nombre y su velocidad.
-- **Polimorfismo:** las direcciones y los tipos de vehículo responden a los mismos mensajes, así que el código que los usa no necesita preguntar de qué tipo son.
-- **Objetos bien conocidos:** el alumno, la meta y los generadores son objetos únicos.
-- **Colecciones y bloques:** las listas de carriles, vidas y generadores se recorren con `forEach`, `anyOne` y similares.
-- **Double dispatch:** cuando el alumno choca con algo, le avisa al otro objeto para que decida qué pasa (`interactuar` / `interaccion`), en vez de preguntarle qué es.
-- **Responsabilidad de cada objeto:** cada carril sabe crear y reponer sus propios vehículos, y cada vehículo sabe moverse y avisarle al carril cuando termina su recorrido.
-
----
-
-## 🚧 Próximas mejoras
+## 🚧 Próximas mejoras (ideas futuras)
 
 - Pantalla de victoria al llegar a la UNQ.
-- Reiniciar la partida con la tecla **R**.
-- Interacciones distintas según el tipo de vehículo.
+- Interacciones que agreguen mas mecanicas distintas según el tipo de vehículo.
 - Comida que aparece cada tanto y permite recuperar una vida.
-- Zonas del tablero por donde el alumno no puede caminar.
+- Niveles.
 
 ---
 
@@ -97,6 +71,6 @@ Los obstáculos son vehículos que recorren los carriles de lado a lado. Hay cua
 
 **Grupo 5** — Programación con Objetos 1, Universidad Nacional de Quilmes
 
-- _Nombre del integrante 1_
-- _Nombre del integrante 2_
-- _..._
+- Daniel Rubio
+- Juan Melo
+- Mauricio Chacolla
