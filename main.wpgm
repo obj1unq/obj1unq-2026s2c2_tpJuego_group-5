@@ -1,15 +1,12 @@
 import wollok.game.*
-import videojuegoGRUPO5.*
-import vida.*   
+import videojuegoGRUPO5.*   
 import direccion.*
+import estado.*
+import worldUNQ.*
 
 program videojuego {
 
-    game.width(10)
-    game.height(10)
-    game.cellSize(50)
-    game.boardGround("fondo_unq.png")
-    game.title("Cruzar la Carretera")
+    tablero.iniciar()
 
 	generadorDeCarriles.generar(4)
     
@@ -25,7 +22,7 @@ program videojuego {
     keyboard.up().onPressDo({ alumno.mover(arriba) })
     keyboard.down().onPressDo({ alumno.mover(abajo) })
 
-
+    keyboard.r().onPressDo({alumno.reinicio()})
 
     game.start()
 }

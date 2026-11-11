@@ -1,5 +1,4 @@
 import wollok.game.*
-import vida.*
 import vehiculo.*
 import direccion.*
 import estado.*
@@ -8,57 +7,52 @@ import estado.*
 //  ALUMNO: PERSONAJE PRINCIPAL
 // =====================================================================
 object alumno {
-    const vidasRestantes = salud
     var property position = game.at(4,0)
     var estado = vivo
 	
-    method estado() = estado
+    method image() = "estudiante_" + estado.cuantasVidasHay() + "vida.png"
+	
     method estaVivo() = estado.estaVivo()
 
-
-	method descontarVida(){
-		vidasRestantes.perderUnaVida()
-	}
-   
-	method serAtropelladoPorVehiculo() {
-		if (!self.estaMuerto()) {
-			self.descontarVida()
-			
-			self.volverAlInicio()
-			self.fueDerrotado()
-		}
-		
-	}
-	method fueDerrotado(){
-		if(self.estaMuerto()){
-            estado = muerto
-			self.anunciarDerrota()
-		}
+    method descontarVida(){
+		estado.vidaActual()
 	}
 
 	method anunciarDerrota() {
-            
-		   game.say(self, "me morí") 
+        game.say(self, "me morí") 
+        self.derrotado()
 	}
 
 	method volverAlInicio() { position = game.at(4,0) }
 
-	method estaMuerto() {
-		return !vidasRestantes.hayVidas()
-	}
-
 	method mover(direccion) {
         estado.mover(self, direccion)
     }
-	  
-	method image() = "estudiante_" + vidasRestantes.cuantasVidasHay() + "vida.png"
 	
+    method derrotado(){estado = estado.opuesto()} 
+
+    method reinicio() {
+        if (!self.estaVivo()){
+            estado = estado.opuesto()
+        }
+        estado.reiniciar()
+        self.volverAlInicio()
+    }
 	//interacciones con colisiones:
 	method interactuar(algo){
 		algo.interaccion(self)
     }
     //interaccion con vehiculo: serAtropelladoPorVehiculo
-
+    method serAtropelladoPorVehiculo(vidasPerdidas) {
+		if (estado.cuantasVidasHay() - vidasPerdidas <= 0) {
+			vidasPerdidas.times({ n => self.descontarVida()})
+			self.volverAlInicio()
+            self.anunciarDerrota()
+		} else {
+            vidasPerdidas.times({ n => self.descontarVida()})
+			self.volverAlInicio()
+        }
+	}
     //interaccion con vida:
     method paraDespues(){}
 }

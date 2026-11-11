@@ -1,8 +1,9 @@
+import worldUNQ.*
 // =====================================================================
 //  DIRECCIONES del PERSONAJE PRINCIPAL. Tambien son usadas para Carriles/Vehiculos
 // =====================================================================
-
 class Direccion{
+    const mundo = tablero
     method nombre() 
     method texto()
     method mover(posicion)
@@ -45,22 +46,22 @@ object izquierda inherits Direccion {
     override method mover(posicion) = posicion.left(1)
     override method puedeAvanzar(posicion) = posicion.x() > 0
 
-    method columnaInicial() = game.width() - 1
+    method columnaInicial() = mundo.columnaInicialIzquierda()
 }
 
 object derecha inherits Direccion {
     override method nombre() = "derecha"
     override method texto() = "a la derecha"
     override method mover(posicion) = posicion.right(1)
-    override method puedeAvanzar(posicion) = posicion.x() < game.width() - 1
+    override method puedeAvanzar(posicion) = posicion.x() < mundo.columnaInicialIzquierda()
 
-    method columnaInicial() = 0
+    method columnaInicial() = mundo.columnaInicialDerecha()
 }
 object arriba inherits Direccion {
     override method nombre() = "arriba"
     override method texto() = "hacia arriba"
     override method mover(posicion) = posicion.up(1)
-    override method puedeAvanzar(posicion) = posicion.y() < game.height() - 1
+    override method puedeAvanzar(posicion) = posicion.y() < mundo.filaInicialSuperior()
 
     override method puedeAvanzarParaAlumno(posicion) = posicion.y() < 6
     override method limiteSuperiorParaAlumno(posicion) =
