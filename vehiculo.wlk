@@ -32,13 +32,13 @@ class Vehiculo {
 }
 
 class Auto inherits Vehiculo {
-    override method intervaloEnMs() = 300
+    override method intervaloEnMs() = 700
     override method nombre() = "auto"
     override method vidasQueQuita() = 1
 }
 
 class Moto inherits Vehiculo {
-    override method intervaloEnMs() = 100
+    override method intervaloEnMs() = 600
     override method nombre() = "moto"
     override method vidasQueQuita() = 1
 }
