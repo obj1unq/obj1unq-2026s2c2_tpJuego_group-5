@@ -1,82 +1,76 @@
-# 🎓 Cruzá hasta la UNQ
+# 🚸 Cruzar la carretera
 
-Juego estilo *Frogger* desarrollado en **Wollok**. Sos un alumno que tiene que cruzar varios carriles llenos de tráfico para llegar a la puerta de la Universidad Nacional de Quilmes (UNQ), sin perder todas tus vidas en el intento.
+> Videojuego hecho con **Wollok Game** para la materia *Programación con Objetos 1* (Universidad Nacional de Quilmes) — **Grupo 5**.
 
-## 🎯 Objetivo
+Un estudiante tiene que cruzar una carretera muy transitada para llegar a la universidad. Parece fácil... hasta que aparecen las motos, los autos, los colectivos y los camiones. Tiene solo **3 vidas**: hay que cruzar con habilidad y buenos reflejos.
 
-Llegar a la puerta de la UNQ, ubicada en la parte superior del tablero, esquivando los vehículos que circulan por los carriles.
+---
 
-## 🧑‍🎓 El alumno
+## 🎮 ¿En qué consiste el juego?
 
-El sprite del alumno cambia según las vidas que le quedan (el juego carga `estudiante_<N>vida.png`).
+El jugador controla a un alumno que empieza en la parte inferior del tablero. Su objetivo es **llegar a la puerta de la UNQ**, ubicada del otro lado de la carretera, atravesando los carriles sin que lo atropelle ningún vehículo.
 
-| 3 vidas | 2 vidas | 1 vida |
-|:-------:|:-------:|:------:|
-| <img src="assets/estudiante_3vida.png" width="160" alt="Alumno con 3 vidas"> | <img src="assets/estudiante_2vida.png" width="160" alt="Alumno con 2 vidas"> | <img src="assets/estudiante_1vida.png" width="160" alt="Alumno con 1 vida"> |
-| `estudiante_3vida.png` | `estudiante_2vida.png` | `estudiante_1vida.png` |
+Cada vez que un vehículo choca contra el alumno, tiene una interacción segun el tipo de vehículo que sea, la cual es detallada en la sección Obstáculos.
 
-## 🕹️ Cómo se juega
+---
 
-- El alumno comienza en la parte inferior del tablero (posición `(4, 0)`).
-- Los carriles con tráfico están en las filas 1 a 4, y cada uno circula hacia la derecha o hacia la izquierda.
-- Si un vehículo te atropella, perdés una vida y volvés al punto de inicio.
-- Cuando te quedás sin vidas, el alumno muere y el juego termina.
-- Si llegás a la puerta de la UNQ, ganás.
+## 👤 Personaje principal: el alumno
 
-### Controles
+Es el único personaje que controla el jugador.
 
-> Completar con las teclas definidas en tu archivo de configuración del juego.
+- **Objetivo:** cruzar todos los carriles y llegar a la UNQ.
+- **Vidas:** empieza con **3 vidas**, que se muestran como corazones en pantalla. Cada atropello descuenta una y el corazón correspondiente se vacía.
+- **Aspecto cambiable:** la imagen del alumno cambia según las vidas que le quedan, así se ve de un vistazo en qué estado está.
+- **Al ser atropellado:** pierde una vida y regresa a su posición inicial.
+- **Al quedarse sin vidas:** anuncia su derrota ("me morí") y pierde la partida.
+- **Límites:** no puede salirse del tablero.
+
+---
+
+## 🚗 Obstáculos: los vehículos
+
+Los obstáculos son vehículos que recorren los carriles de lado a lado. Hay cuatro tipos, cada uno con su propia velocidad:
+
+| Vehículo | Velocidad | Daño 
+|---|---| --- |
+| 🏍️ Moto | La más rápida | 1 |
+| 🚗 Auto | Rápida | 1 |
+| 🚌 Colectivo | Media | 2 |
+| 🚛 Camión | La más lenta | 2 |
+
+**Cómo se comportan:**
+
+- La carretera está formada por varios **carriles**. Cada carril tiene su propia fila en el tablero y su propia dirección: unos van hacia la derecha y otros hacia la izquierda.
+- Cada vehículo avanza celda por celda hasta llegar al borde del tablero y desaparece.
+- Después de unos segundos de espera, el carril genera un **nuevo vehículo de un tipo elegido al azar**, así que el tráfico nunca es igual dos veces.
+- Si un vehículo toca al alumno, este es atropellado y pierde una vida o 2 vidas.
+
+---
+
+## ⌨️ Controles
 
 | Tecla | Acción |
-|-------|--------|
-| ↑ | Mover hacia arriba |
-| ↓ | Mover hacia abajo |
-| ← | Mover hacia la izquierda |
-| → | Mover hacia la derecha |
+|---|---|
+| ⬆️ Flecha arriba | Mover hacia arriba |
+| ⬇️ Flecha abajo | Mover hacia abajo |
+| ⬅️ Flecha izquierda | Mover hacia la izquierda |
+| ➡️ Flecha derecha | Mover hacia la derecha |
 
-## 🚗 Elementos del juego
+---
 
-| Elemento | Descripción |
-|----------|-------------|
-| **Alumno** | Personaje principal. Su imagen cambia según las vidas que le quedan. |
-| **Carriles** | Generan vehículos de forma continua. La dirección de cada uno se elige al azar. |
-| **Vehículos** | Autos, motos, colectivos y camiones, creados por sus respectivas fábricas. |
-| **Puerta de la UNQ** | La meta, ubicada en la posición `(5, 6)`. |
+## 🚧 Próximas mejoras (ideas futuras)
 
-## 🧱 Estructura del proyecto
+- Pantalla de victoria al llegar a la UNQ.
+- Interacciones que agreguen mas mecanicas distintas según el tipo de vehículo.
+- Comida que aparece cada tanto y permite recuperar una vida.
+- Niveles.
 
-| Archivo | Contenido |
-|---------|-----------|
-| `alumno` | Personaje principal: movimiento, vidas, estado y colisiones. |
-| `Carril` | Clase que genera y retira vehículos de una fila. |
-| `generadorDeCarriles` | Crea los carriles y los pone en marcha. |
-| `fabricaDeVehiculos` y fábricas | Patrón *factory* para crear autos, motos, colectivos y camiones. |
-| `unq_Puerta` | Meta del juego. |
-| `vida.wlk` | Manejo de la salud del alumno. |
-| `vehiculo.wlk` | Definición de los vehículos. |
-| `direccion.wlk` | Direcciones de movimiento (derecha e izquierda). |
-| `estado.wlk` | Estados del alumno (vivo y muerto). |
+---
 
-## 🧠 Conceptos de programación aplicados
+## 👥 Equipo
 
-- **Polimorfismo**: los vehículos, las fábricas y los estados del alumno se usan de forma intercambiable.
-- **Patrón State**: el alumno delega su movimiento en el estado actual (`vivo` o `muerto`).
-- **Patrón Factory**: cada tipo de vehículo tiene su propia fábrica.
-- **Delegación**: la interacción por colisión se resuelve con `algo.interaccion(alumno)`.
-- **Composición**: los carriles reciben su dirección, fila, tiempo de espera y generador de vehículos.
+**Grupo 5** — Programación con Objetos 1, Universidad Nacional de Quilmes
 
-## ▶️ Cómo ejecutarlo
-
-1. Instalá [Wollok](https://www.wollok.org) o la extensión de Wollok para VS Code.
-2. Cloná o descargá este repositorio.
-3. Abrí el proyecto y ejecutá el programa principal con *Run Program*.
-
-## 👥 Autores
-
- 
-- Mauricio Jose Chacolla Castellon 
 - Daniel Rubio
 - Juan Melo
-
-
-Trabajo realizado para la materia Programación con Objetos I — Universidad Nacional de Quilmes.
+- Mauricio Chacolla
