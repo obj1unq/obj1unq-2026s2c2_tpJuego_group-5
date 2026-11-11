@@ -31,12 +31,12 @@ class Vehiculo {
 }
 
 class Auto inherits Vehiculo {
-    override method intervaloEnMs() = 300
+    override method intervaloEnMs() = 400
     override method nombre() = "auto"
 }
 
 class Moto inherits Vehiculo {
-    override method intervaloEnMs() = 100
+    override method intervaloEnMs() = 600
     override method nombre() = "moto"
 }
 
