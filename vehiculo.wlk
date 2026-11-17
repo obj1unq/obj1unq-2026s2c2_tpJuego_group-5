@@ -32,25 +32,25 @@ class Vehiculo {
 }
 
 class Auto inherits Vehiculo {
-    override method intervaloEnMs() = 700
+    override method intervaloEnMs() = 600
     override method nombre() = "auto"
     override method vidasQueQuita() = 1
 }
 
 class Moto inherits Vehiculo {
-    override method intervaloEnMs() = 600
+    override method intervaloEnMs() = 900
     override method nombre() = "moto"
     override method vidasQueQuita() = 1
 }
 
 class Camion inherits Vehiculo {
-    override method intervaloEnMs() = 800
+    override method intervaloEnMs() = 700
     override method nombre() = "camion"
     override method vidasQueQuita() = 2
 }
 
 class Colectivo inherits Vehiculo {
-    override method intervaloEnMs() = 500
+    override method intervaloEnMs() = 800
     override method nombre() = "colectivo"
     override method vidasQueQuita() = 2
 }
