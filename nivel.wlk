@@ -8,6 +8,7 @@ import worldUNQ.*
 object menuPrincipal {
     var property fondoActual = fondoMenu
     
+    
     method empezar() {
         
         game.addVisual(fondoActual)
