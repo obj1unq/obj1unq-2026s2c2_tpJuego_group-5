@@ -61,7 +61,7 @@ class ImagenFondo {
     method image()
 }
 object fondoMenu inherits ImagenFondo {
-  override method image() = "pantalla1.jpeg"
+  override method image() = "pantalla1.png"
 }
 
 object fondoNivel1 inherits ImagenFondo {
