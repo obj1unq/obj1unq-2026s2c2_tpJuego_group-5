@@ -1,4 +1,5 @@
 import wollok.game.*
+import nivel.*
 //limitaciones del tablero
 object tablero {
     const alto = 10
@@ -7,6 +8,7 @@ object tablero {
     const titulo = "Cruzar la carretera"
 
     method iniciar(){
+        game.addVisual(fondoMenu)
         game.height(alto)
         game.width(ancho)
         game.cellSize(tamañoDeCelda)

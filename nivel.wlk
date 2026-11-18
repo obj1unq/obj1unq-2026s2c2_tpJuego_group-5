@@ -4,33 +4,33 @@ import direccion.*
 import estado.*
 import worldUNQ.*
 
+class Niveles{
+ method empezar()
+ method finalizado()
+ method siguientePantalla()
+}
 
-object menuPrincipal {
+object menuPrincipal inherits Niveles{
     const property fondoActual = fondoMenu
     
 
-    method empezar() {
+  override  method empezar() {
         
-        game.addVisual(fondoActual)
-
         keyboard.c().onPressDo({self.finalizado()})
-
         game.start()
     }
 
-    method finalizado() {
-        
+   override method finalizado() {
         game.removeVisual(fondoActual)
         self.siguientePantalla().empezar()
-      
     }
 
-    method siguientePantalla() = nivel1
+  override  method siguientePantalla() = nivel1
 }
-object nivel1 {
+object nivel1 inherits Niveles {
     const property fondo = fondoNivel1 
 
-    method empezar() {
+  override  method empezar() {
         game.addVisual(fondo)
 
         generadorDeCarriles.generar(4)
@@ -49,19 +49,21 @@ object nivel1 {
 
         keyboard.r().onPressDo({alumno.reinicio()})
     }
+    override method finalizado(){}
+    override method siguientePantalla(){}
 }
 
-class imagenFondo {
+class ImagenFondo {
     method position(){
         return game.at(0,0) 
     }
 
     method image()
 }
-object fondoMenu inherits imagenFondo {
+object fondoMenu inherits ImagenFondo {
   override method image() = "pantalla1.jpeg"
 }
 
-object fondoNivel1 inherits imagenFondo {
+object fondoNivel1 inherits ImagenFondo {
   override method image() = "fondo_unq.png"
 }
