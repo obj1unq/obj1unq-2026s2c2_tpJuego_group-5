@@ -11,18 +11,24 @@ class Vehiculo {
     method intervaloEnMs()
     method nombre()
     method vidasQueQuita()
+    method movimiento()
+    method cantidadPorViaje()
 
     method image() = self.nombre() + "_" + carril.direccion().nombre() + ".png"
 
     method empezarARecorrer() { tick.start() }
 
     method avanzar() {
-        if (carril.direccion().puedeAvanzar(position)) {
-            position = carril.direccion().siguiente(position)
+        if (carril.direccion().puedeAvanzar(position)){
+                self.movimiento()            
         } else {
             tick.stop()
             carril.retirarVehiculoYComenzarNuevoViaje(self)
         }
+    }
+
+    method movimientoBasico(){
+        position = carril.direccion().siguiente(position)
     }
 
     //mensaje de colisión contra el alumno
@@ -35,22 +41,37 @@ class Auto inherits Vehiculo {
     override method intervaloEnMs() = 600
     override method nombre() = "auto"
     override method vidasQueQuita() = 1
+    override method movimiento(){ self.movimientoBasico() }
+    override method cantidadPorViaje() = 1
 }
 
 class Moto inherits Vehiculo {
+    var subiendo = true
     override method intervaloEnMs() = 900
     override method nombre() = "moto"
     override method vidasQueQuita() = 1
+     override method movimiento(){
+        const siguienteX = carril.direccion().siguiente(position).x()
+        const filaDeArriba = (carril.fila() + 1).min(4)
+        const nuevaY = if (subiendo) filaDeArriba else carril.fila()
+        position = game.at(siguienteX, nuevaY)
+        subiendo = !subiendo
+        }
+    override method cantidadPorViaje() = 1.randomUpTO(2)
 }
 
 class Camion inherits Vehiculo {
     override method intervaloEnMs() = 700
     override method nombre() = "camion"
     override method vidasQueQuita() = 2
+    override method movimiento(){ self.movimientoBasico() }
+    override method cantidadPorViaje() = 1.randomUpTO(2)
 }
 
 class Colectivo inherits Vehiculo {
     override method intervaloEnMs() = 800
     override method nombre() = "colectivo"
     override method vidasQueQuita() = 2
+    override method movimiento(){ self.movimientoBasico() }
+    override method cantidadPorViaje() = 1.randomUpTO(3)
 }

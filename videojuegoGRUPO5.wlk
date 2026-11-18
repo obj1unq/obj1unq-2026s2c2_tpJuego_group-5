@@ -64,6 +64,7 @@ class Carril {
     const tiempoDeEspera
     const generadorDeVehiculos = fabricaDeVehiculos
 
+    method fila() = fila
     method posicionInicial() = game.at(direccion.columnaInicial(), fila)
 
     method iniciarViaje() {
