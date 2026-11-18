@@ -6,9 +6,9 @@ import worldUNQ.*
 
 
 object menuPrincipal {
-    var property fondoActual = fondoMenu
+    const property fondoActual = fondoMenu
     
-    
+
     method empezar() {
         
         game.addVisual(fondoActual)
@@ -21,8 +21,6 @@ object menuPrincipal {
     method finalizado() {
         
         game.removeVisual(fondoActual)
-
-        fondoActual = self.siguientePantalla().fondo()
         self.siguientePantalla().empezar()
       
     }
@@ -33,6 +31,7 @@ object nivel1 {
     const property fondo = fondoNivel1 
 
     method empezar() {
+        game.addVisual(fondo)
 
         generadorDeCarriles.generar(4)
         
