@@ -1,13 +1,9 @@
 import wollok.game.*
-import videojuegoGRUPO5.*   
-import direccion.*
-import estado.*
 import worldUNQ.*
 import juego.*
-import nivel.*
 
 
 program main {
     tablero.iniciar()
-    menuPrincipal.empezar()
+    gestorDeEtapas.comenzar()
 }

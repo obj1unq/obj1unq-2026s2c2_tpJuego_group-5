@@ -67,7 +67,7 @@ class Camion inherits Vehiculo {
     override method movimiento(){ self.movimientoBasico() }
     override method cantidadPorViaje() = 1.randomUpTO(2)
 }
-
+    
 class Colectivo inherits Vehiculo {
     override method intervaloEnMs() = 800
     override method nombre() = "colectivo"
