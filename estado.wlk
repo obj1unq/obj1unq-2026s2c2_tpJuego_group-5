@@ -78,9 +78,9 @@ class Vida{
 object salud {
 	//Es en orden descendente, es decir, de la vida mas alta (3) hasta la mas baja (1)
 	const vidas = [
-        new Vida(position = game.at(9,0),   cantidadDeVidas = 3),
-        new Vida(position = game.at(8,0),   cantidadDeVidas = 2),
-		new Vida(position = game.at(7,0),   cantidadDeVidas = 1)
+        new Vida(position = game.at(9,9),   cantidadDeVidas = 3),
+        new Vida(position = game.at(8,9),   cantidadDeVidas = 2),
+		new Vida(position = game.at(7,9),   cantidadDeVidas = 1)
     ]
 
     method iniciar() {

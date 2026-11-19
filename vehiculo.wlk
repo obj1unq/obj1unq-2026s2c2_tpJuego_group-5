@@ -57,7 +57,7 @@ class Moto inherits Vehiculo {
         position = game.at(siguienteX, nuevaY)
         subiendo = !subiendo
         }
-    override method cantidadPorViaje() = 1.randomUpTO(2)
+    override method cantidadPorViaje() = 1.randomUpTo(2)
 }
 
 class Camion inherits Vehiculo {
@@ -65,7 +65,7 @@ class Camion inherits Vehiculo {
     override method nombre() = "camion"
     override method vidasQueQuita() = 2
     override method movimiento(){ self.movimientoBasico() }
-    override method cantidadPorViaje() = 1.randomUpTO(2)
+    override method cantidadPorViaje() = 1.randomUpTo(2)
 }
     
 class Colectivo inherits Vehiculo {
@@ -73,5 +73,5 @@ class Colectivo inherits Vehiculo {
     override method nombre() = "colectivo"
     override method vidasQueQuita() = 2
     override method movimiento(){ self.movimientoBasico() }
-    override method cantidadPorViaje() = 1.randomUpTO(3)
+    override method cantidadPorViaje() = 1.randomUpTo(3)
 }

@@ -1,5 +1,96 @@
+import wollok.game.*
 import videojuegoGRUPO5.*
+import estado.*
+import direccion.*
+import carril.*
+import vehiculo.*
+import worldUNQ.*
+import fondos.*
+import nivel.*
+import juego.*
 
-describe "Alumno" {
-	//Falta hacer test
+// =====================================================================
+//  ALUMNO: movimiento y limites del tablero
+// =====================================================================
+describe "Alumno - movimiento" {
+
+	method initialize() {
+		game.addVisual(alumno)
+	}
+
+	test "nuestro makakito empieza en la posicion (4,0)" {
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia arriba" {
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia la derecha" {
+		alumno.mover(derecha)
+		assert.equals(game.at(5, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia la izquierda" {
+		alumno.mover(izquierda)
+		assert.equals(game.at(3, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia abajo" {
+		alumno.position(game.at(4, 3))
+		alumno.mover(abajo)
+		assert.equals(game.at(4, 2), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por la izquierda" {
+		alumno.position(game.at(0, 3))
+		assert.throwsException({ alumno.mover(izquierda) })
+		assert.equals(game.at(0, 3), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por la derecha" {
+		alumno.position(game.at(9, 3))
+		assert.throwsException({ alumno.mover(derecha) })
+		assert.equals(game.at(9, 3), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por abajo" {
+		assert.throwsException({ alumno.mover(abajo) })
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito no puede subir a la fila 6 si no esta en la columna de la puerta" {
+		alumno.position(game.at(4, 5))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(4, 5), alumno.position())
+
+		alumno.position(game.at(6, 5))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(6, 5), alumno.position())
+	}
+
+	test "nuestro makakito puede subir a la fila 6 por la columna de la puerta y llega a la UNQ" {
+		alumno.position(game.at(5, 5))
+		alumno.mover(arriba)
+		assert.equals(unq_Puerta.position(), alumno.position())
+	}
+
+	test "nuestro makakito no puede pasar de la fila 6" {
+		alumno.position(game.at(5, 6))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(5, 6), alumno.position())
+	}
+
+	test "nuestro makakito muerto no se mueve" {
+		alumno.estado(muerto)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "volverAlInicio devuelve a uestro makakito a la posicion (4,0)" {
+		alumno.position(game.at(7, 4))
+		alumno.volverAlInicio()
+		assert.equals(game.at(4, 0), alumno.position())
+	}
 }
