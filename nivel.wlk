@@ -19,8 +19,12 @@ object presentacionNivel1 inherits Presentacion {
 
 object nivel1 inherits Nivel {
     override method fondo() = fondoNivel1
-    override method generadorDeCarriles() = carrilesDeAutosYCamiones                    //esto hace que solo se vean autos y camiones
-    override method cantidadDeCarriles() = 4                                            //volvemos a 4 carriles
+    override method generadorDeCarriles() = new Generador(
+        filasDisponibles = [1, 2, 3, 4],
+        tiempoDeEspera = 3000,
+        tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones])        // la fabrica solo es de autos y camiones
+    )
+    override method cantidadDeCarriles() = 4
     override method siguienteEtapa() = presentacionNivel2
 }
 
@@ -31,7 +35,11 @@ object presentacionNivel2 inherits Presentacion {
 
 object nivel2 inherits Nivel {
     override method fondo() = fondoNivel2
-    override method generadorDeCarriles() = carrilesDeMoto
+    override method generadorDeCarriles() = new Generador(
+        filasDisponibles = [ 2, 3, 3],
+        tiempoDeEspera = 1000,
+        tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos])        //la fabrica es de motos, autos y camiones
+    )
     override method cantidadDeCarriles() = 3
     override method siguienteEtapa() = presentacionNivel3
 }
@@ -43,7 +51,11 @@ object presentacionNivel3 inherits Presentacion {
 
 object nivel3 inherits Nivel {
     override method fondo() = fondoNivel3
-    override method generadorDeCarriles() = carrilesDeColectivo
-    override method cantidadDeCarriles() = 2
+    override method generadorDeCarriles() = new Generador(
+        filasDisponibles = [2, 3, 4, 5],
+        tiempoDeEspera = 3000,
+        tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos, fabricaDeColectivos])      //la fabrica es de motos, autos, camiones y colectivos 
+    )
+    override method cantidadDeCarriles() = 4
     override method siguienteEtapa() = menuPrincipal
 }
