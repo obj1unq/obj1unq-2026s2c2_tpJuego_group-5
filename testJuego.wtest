@@ -93,4 +93,99 @@ describe "Alumno - movimiento" {
 		alumno.volverAlInicio()
 		assert.equals(game.at(4, 0), alumno.position())
 	}
+
+}
+
+// =====================================================================
+//  ALUMNO: vidas, atropellos, derrota y reinicio
+// =====================================================================
+describe "Nuestro makakito - vidas y atropellos" {
+
+	const carrilDerecha = new Carril(fila = 1, direccion = derecha, tiempoDeEspera = 1000, generadorDeVehiculos = fabricaDeAutos)
+
+	method initialize() {
+		game.addVisual(alumno)
+	}
+
+	test "nuestro makakito empieza con 3 vidas" {
+		assert.equals("estudiante_3vida.png", alumno.image())
+	}
+
+	test "ser atropellado por un vehiculo de dano 1 descuenta una vida y vuelve al inicio" {
+		alumno.position(game.at(4, 3))
+		alumno.serAtropelladoPorVehiculo(1)
+		assert.equals("estudiante_2vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "ser atropellado por un vehiculo de dano 2 descuenta dos vidas" {
+		alumno.serAtropelladoPorVehiculo(2)
+		assert.equals("estudiante_1vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito sigue pudiendose mover despues de un atropello que no lo mata" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "al perder la ultima vida el alumno queda con 0 vidas" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		assert.equals("estudiante_0vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "despues de la derrota el alumno no se puede mover" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "un atropello de daño 2 con una sola vida restante lo mata" {
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.serAtropelladoPorVehiculo(2)
+		assert.equals("estudiante_0vida.png", alumno.image())
+	}
+
+	test "reiniciar despues de morir devuelve las 3 vidas y permite moverse" {
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.reinicio()
+		assert.equals("estudiante_3vida.png", alumno.image())
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "reiniciar estando vivo recupera todas las vidas y vuelve al inicio" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.position(game.at(6, 3))
+		alumno.reinicio()
+		assert.equals("estudiante_3vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "colisionar con un auto le quita una vida" {
+		alumno.interactuar(new Auto(carril = carrilDerecha))
+		assert.equals("estudiante_2vida.png", alumno.image())
+	}
+
+	test "colisionar con una moto le quita una vida" {
+		alumno.interactuar(new Moto(carril = carrilDerecha))
+		assert.equals("estudiante_2vida.png", alumno.image())
+	}
+
+	test "colisionar con un colectivo le quita dos vidas" {
+		alumno.interactuar(new Colectivo(carril = carrilDerecha))
+		assert.equals("estudiante_1vida.png", alumno.image())
+	}
+
+	test "colisionar con un camion le quita dos vidas" {
+		alumno.interactuar(new Camion(carril = carrilDerecha))
+		assert.equals("estudiante_1vida.png", alumno.image())
+	}
 }

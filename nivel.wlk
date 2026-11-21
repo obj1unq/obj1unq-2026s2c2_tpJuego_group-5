@@ -19,13 +19,13 @@ object presentacionNivel1 inherits Presentacion {
 
 object nivel1 inherits Nivel {
     override method fondo() = fondoNivel1
-    override method generadorDeCarriles() = carrilesDeAuto
-    override method cantidadDeCarriles() = 2
+    override method generadorDeCarriles() = carrilesDeAutosYCamiones                    //esto hace que solo se vean autos y camiones
+    override method cantidadDeCarriles() = 4                                            //volvemos a 4 carriles
     override method siguienteEtapa() = presentacionNivel2
 }
 
 object presentacionNivel2 inherits Presentacion {
-    override method fondo() = fondoDescriptivoNivel1
+    override method fondo() = fondoDescriptivoNivel2                                    //esta es la imagen en el Agora
     override method siguienteEtapa() = nivel2
 }
 

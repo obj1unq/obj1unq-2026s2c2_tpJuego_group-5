@@ -17,6 +17,9 @@ object fondoDescriptivoNivel1 inherits ImagenFondo {
 object fondoNivel1 inherits ImagenFondo {
     override method image() = "fondo_unq.png"
 }
+object fondoDescriptivoNivel2 inherits ImagenFondo {
+    override method image() = "llegoALaUnq.png"
+}
 object fondoNivel2 inherits ImagenFondo {
     override method image() = "fondo_2.jpeg"
 }

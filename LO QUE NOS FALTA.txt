@@ -1,0 +1,25 @@
+comportamiento para el juego: 
+	vehiculos y personajes
+	lluvia, se ve menos en el carril
+
+nivel 1 
+
+solo hay autos y camiones
+
+
+----------------------------------------------------------------------------------------------------------------
+nivel 2
+
+ (5,6) down en busqueda de apuntes tiene que volver al banco de plaza (ponemos los apuntes y el paraguas ahi)
+
+se agrega el colectivo
+hay que hacer llover y ver que se puede hacer con el paraguas y la lluvia
+----------------------------------------------------------------------------------------------------------------
+nivel 3 
+
+dentro de la unqui, con tiempo
+	ver el cronometro
+	ver si coalisiona pierde tiempo
+
+
+hacer muchos test

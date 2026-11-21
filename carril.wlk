@@ -25,7 +25,7 @@ class Carril {
 
 class Generador {
     const direcciones = [derecha, izquierda]
-    const carriles = []
+    const carriles = []          // ahora arranca vacía: acá van sólo los Carril
 
     method filasDisponibles()
     method tiempoDeEspera()
@@ -33,7 +33,8 @@ class Generador {
 
     method generar(cantidad) {
         self.validarCantidad(cantidad)
-        cantidad.times({ numero => self.procesoDeGenerar(numero)}) //numero inicia en 1 hasta cantidad
+        carriles.clear()         // por si el nivel se juega más de una vez
+        cantidad.times({ numero => self.procesoDeGenerar(numero) })
         carriles.forEach({ carril => carril.iniciarViaje() })
     }
     method validarCantidad(cantidad) {
@@ -98,6 +99,20 @@ object carrilesDeCamion inherits Generador{
     override method filasDisponibles() = filasDisponibles
     override method tiempoDeEspera() = tiempoDeEspera
     override method tipoDeFabrica() = fabricaDeCamiones
+}
+object carrilesDeAutosYCamiones inherits Generador {
+    const filasDisponibles = [1, 2, 3, 4]
+    const tiempoDeEspera = 3000 // 3 segundos
+
+    override method filasDisponibles() = filasDisponibles
+    override method tiempoDeEspera() = tiempoDeEspera
+    override method tipoDeFabrica() = fabricaDeAutosYCamiones
+}
+
+object fabricaDeAutosYCamiones {
+    const fabricas = [fabricaDeAutos, fabricaDeCamiones]
+
+    method nuevoVehiculoPara(carril) = fabricas.anyOne().nuevoVehiculoPara(carril)
 }
 
 object fabricaDeVehiculos {

@@ -65,10 +65,16 @@ object alumno {
 //  META: FINAL DEL JUEGO
 // =====================================================================
 object unq_Puerta {
-    var property position = game.at(5,6) 
-	    
-	method interaccion(visitante) {
-        game.say(visitante, "¡Llegué a la UNQ!")
-        gestorDeEtapas.avanzar()
+    var property position = game.at(5,6)
+    var llegando = false
+
+    method interaccion(visitante) {
+        if (!llegando) {
+            llegando = true
+            game.say(visitante, "¡Llegué a la UNQ!")
+            game.schedule(2500, { => llegando = false                           //aca espera un poco, para que se vea que el personaje dice que llego a la unq
+                gestorDeEtapas.avanzar()
+            })
+        }
     }
 }
