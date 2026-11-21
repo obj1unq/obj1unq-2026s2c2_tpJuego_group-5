@@ -41,7 +41,7 @@ class Presentacion inherits Etapa {
 class Nivel inherits Etapa {
     method generadorDeCarriles()
     method cantidadDeCarriles()
-
+    method spawnAlumno() = game.at(4,0)
 
     method ambiente() {}      // por defecto, sin efectos
 
@@ -49,6 +49,7 @@ class Nivel inherits Etapa {
     override method configurar() {
         self.generadorDeCarriles().generar(self.cantidadDeCarriles())
 
+        alumno.empezarEn(self.spawnAlumno()) 
         salud.iniciar()
         alumno.volverAlInicio()
         game.addVisual(alumno)

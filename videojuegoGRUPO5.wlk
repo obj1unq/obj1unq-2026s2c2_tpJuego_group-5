@@ -11,6 +11,7 @@ import juego.*
 object alumno {
     var property position = game.at(4,0)
     var estado = vivo
+    var spawn = game.at(4,0)
 	
     method estado(_estado)  {estado =  _estado}  
     method image() = "estudiante_" + estado.cuantasVidasHay() + "vida.png"
@@ -24,7 +25,14 @@ object alumno {
         self.derrotado()
 	}
 
-	method volverAlInicio() { position = game.at(4,0) }
+     method empezarEn(posicion) {
+        spawn = posicion
+        self.volverAlInicio()
+    }
+
+
+	method volverAlInicio() {position = spawn}
+
 
 	method mover(direccion) {
         estado.mover(self, direccion)
