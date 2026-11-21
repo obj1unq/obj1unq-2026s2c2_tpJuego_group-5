@@ -1,14 +1,191 @@
-import juego.pepita
-import mainJuego.config
+import wollok.game.*
+import videojuegoGRUPO5.*
+import estado.*
+import direccion.*
+import carril.*
+import vehiculo.*
+import worldUNQ.*
+import fondos.*
+import nivel.*
+import juego.*
 
-describe "group of tests for pepita" {
+// =====================================================================
+//  ALUMNO: movimiento y limites del tablero
+// =====================================================================
+describe "Alumno - movimiento" {
 
-  method initialize() {
-    config.configurarEscenario()
-  }
-  test "pepita tiene posicion e imagen" {
-    assert.equals(game.at(5,5), pepita.position())
-    assert.equals("pepita.png", pepita.image())
-  }
+	method initialize() {
+		game.addVisual(alumno)
+	}
 
+	test "nuestro makakito empieza en la posicion (4,0)" {
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia arriba" {
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia la derecha" {
+		alumno.mover(derecha)
+		assert.equals(game.at(5, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia la izquierda" {
+		alumno.mover(izquierda)
+		assert.equals(game.at(3, 0), alumno.position())
+	}
+
+	test "nuestro makakito se mueve hacia abajo" {
+		alumno.position(game.at(4, 3))
+		alumno.mover(abajo)
+		assert.equals(game.at(4, 2), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por la izquierda" {
+		alumno.position(game.at(0, 3))
+		assert.throwsException({ alumno.mover(izquierda) })
+		assert.equals(game.at(0, 3), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por la derecha" {
+		alumno.position(game.at(9, 3))
+		assert.throwsException({ alumno.mover(derecha) })
+		assert.equals(game.at(9, 3), alumno.position())
+	}
+
+	test "nuestro makakito no puede salirse del tablero por abajo" {
+		assert.throwsException({ alumno.mover(abajo) })
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito no puede subir a la fila 6 si no esta en la columna de la puerta" {
+		alumno.position(game.at(4, 5))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(4, 5), alumno.position())
+
+		alumno.position(game.at(6, 5))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(6, 5), alumno.position())
+	}
+
+	test "nuestro makakito puede subir a la fila 6 por la columna de la puerta y llega a la UNQ" {
+		alumno.position(game.at(5, 5))
+		alumno.mover(arriba)
+		assert.equals(unq_Puerta.position(), alumno.position())
+	}
+
+	test "nuestro makakito no puede pasar de la fila 6" {
+		alumno.position(game.at(5, 6))
+		assert.throwsException({ alumno.mover(arriba) })
+		assert.equals(game.at(5, 6), alumno.position())
+	}
+
+	test "nuestro makakito muerto no se mueve" {
+		alumno.estado(muerto)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "volverAlInicio devuelve a uestro makakito a la posicion (4,0)" {
+		alumno.position(game.at(7, 4))
+		alumno.volverAlInicio()
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+}
+
+// =====================================================================
+//  ALUMNO: vidas, atropellos, derrota y reinicio
+// =====================================================================
+describe "Nuestro makakito - vidas y atropellos" {
+
+	const carrilDerecha = new Carril(fila = 1, direccion = derecha, tiempoDeEspera = 1000, generadorDeVehiculos = fabricaDeAutos)
+
+	method initialize() {
+		game.addVisual(alumno)
+	}
+
+	test "nuestro makakito empieza con 3 vidas" {
+		assert.equals("estudiante_3vida.png", alumno.image())
+	}
+
+	test "ser atropellado por un vehiculo de dano 1 descuenta una vida y vuelve al inicio" {
+		alumno.position(game.at(4, 3))
+		alumno.serAtropelladoPorVehiculo(1)
+		assert.equals("estudiante_2vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "ser atropellado por un vehiculo de dano 2 descuenta dos vidas" {
+		alumno.serAtropelladoPorVehiculo(2)
+		assert.equals("estudiante_1vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "nuestro makakito sigue pudiendose mover despues de un atropello que no lo mata" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "al perder la ultima vida el alumno queda con 0 vidas" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		assert.equals("estudiante_0vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "despues de la derrota el alumno no se puede mover" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "un atropello de daño 2 con una sola vida restante lo mata" {
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.serAtropelladoPorVehiculo(2)
+		assert.equals("estudiante_0vida.png", alumno.image())
+	}
+
+	test "reiniciar despues de morir devuelve las 3 vidas y permite moverse" {
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.serAtropelladoPorVehiculo(2)
+		alumno.reinicio()
+		assert.equals("estudiante_3vida.png", alumno.image())
+		alumno.mover(arriba)
+		assert.equals(game.at(4, 1), alumno.position())
+	}
+
+	test "reiniciar estando vivo recupera todas las vidas y vuelve al inicio" {
+		alumno.serAtropelladoPorVehiculo(1)
+		alumno.position(game.at(6, 3))
+		alumno.reinicio()
+		assert.equals("estudiante_3vida.png", alumno.image())
+		assert.equals(game.at(4, 0), alumno.position())
+	}
+
+	test "colisionar con un auto le quita una vida" {
+		alumno.interactuar(new Auto(carril = carrilDerecha))
+		assert.equals("estudiante_2vida.png", alumno.image())
+	}
+
+	test "colisionar con una moto le quita una vida" {
+		alumno.interactuar(new Moto(carril = carrilDerecha))
+		assert.equals("estudiante_2vida.png", alumno.image())
+	}
+
+	test "colisionar con un colectivo le quita dos vidas" {
+		alumno.interactuar(new Colectivo(carril = carrilDerecha))
+		assert.equals("estudiante_1vida.png", alumno.image())
+	}
+
+	test "colisionar con un camion le quita dos vidas" {
+		alumno.interactuar(new Camion(carril = carrilDerecha))
+		assert.equals("estudiante_1vida.png", alumno.image())
+	}
 }
