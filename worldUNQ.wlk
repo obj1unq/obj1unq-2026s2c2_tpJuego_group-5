@@ -14,9 +14,9 @@ object tablero {
         game.title(titulo)
     }
 
-    method columnaInicialDerecha() = 0
-    method columnaInicialIzquierda() = ancho - 1
-    method filaInicialSuperior() = alto - 1
+    method filaInicialIzquierda() = 0
+    method filaInicialDerecha() = ancho - 1
+    method topeTablero() = alto - 1
 
 }
 

@@ -9,7 +9,7 @@ class Carril {
     const generadorDeVehiculos
 
     method fila() = fila
-    method posicionInicial() = game.at(direccion.columnaInicial(), fila)
+    method posicionInicial() = game.at(direccion.filaInicial(), fila)
 
     method iniciarViaje() {
         const vehiculo = generadorDeVehiculos.nuevoVehiculoPara(self)

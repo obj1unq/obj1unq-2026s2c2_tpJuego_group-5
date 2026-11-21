@@ -14,6 +14,7 @@ nivel 2
 
 se agrega el colectivo
 hay que hacer llover y ver que se puede hacer con el paraguas y la lluvia
+falta sacar el mensaje de "llegué a la unq" en la parte inicial, el objetivo es recuperar los apuntes y luego volver a la unq
 ----------------------------------------------------------------------------------------------------------------
 nivel 3 
 
