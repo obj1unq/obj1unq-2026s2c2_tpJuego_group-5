@@ -5,7 +5,7 @@ import estado.*
 import fondos.*
 import carril.*
 import juego.*
-
+import lluvia.*
 
 object menuPrincipal inherits Presentacion {
     override method fondo() = fondoMenu
@@ -41,6 +41,7 @@ object nivel2 inherits Nivel {
         tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos])        //la fabrica es de motos, autos y camiones
     )
     override method cantidadDeCarriles() = 3
+    override method ambiente() { lluvia.iniciar() }                                                             // <- esta línea hace que llueva en el nivel 2
     override method siguienteEtapa() = presentacionNivel3
 }
 

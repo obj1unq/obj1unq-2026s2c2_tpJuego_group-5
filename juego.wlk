@@ -42,6 +42,10 @@ class Nivel inherits Etapa {
     method generadorDeCarriles()
     method cantidadDeCarriles()
 
+
+    method ambiente() {}      // por defecto, sin efectos
+
+
     override method configurar() {
         self.generadorDeCarriles().generar(self.cantidadDeCarriles())
 
@@ -57,5 +61,7 @@ class Nivel inherits Etapa {
         keyboard.up().onPressDo({ alumno.mover(arriba) })
         keyboard.down().onPressDo({ alumno.mover(abajo) })
         keyboard.r().onPressDo({ alumno.reinicio() })
+
+        self.ambiente()                                                                 //esta linea es para que pueda llover
     }
 }
