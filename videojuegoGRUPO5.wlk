@@ -12,6 +12,7 @@ object alumno {
     var property position = game.at(4,0)
     var estado = vivo
     var spawn = game.at(4,0)
+    var property objetivo = unq_Puerta  
 	
     method estado(_estado)  {estado =  _estado}  
     method image() = "estudiante_" + estado.cuantasVidasHay() + "vida.png"
@@ -30,6 +31,7 @@ object alumno {
         self.volverAlInicio()
     }
 
+    method spawn(_spawn) {spawn = _spawn} 
 
 	method volverAlInicio() {position = spawn}
 
@@ -76,13 +78,26 @@ object unq_Puerta {
     var property position = game.at(5,6)
     var llegando = false
 
-    method interaccion(visitante) {
-        if (!llegando) {
+    method agregarObjetivo(){}
+    method interaccion(macaquito) {
+        if (macaquito.objetivo() == self && !llegando) {
             llegando = true
-            game.say(visitante, "¡Llegué a la UNQ!")
+            game.say(macaquito, "¡Llegué a la UNQ!")
             game.schedule(2500, { => llegando = false                           //aca espera un poco, para que se vea que el personaje dice que llego a la unq
                 gestorDeEtapas.avanzar()
             })
         }
     }
+}
+
+object apuntes{
+    var property position = game.at(2,0)
+    method image() = "apuntes.png" 
+    method agregarObjetivo() { game.addVisual(self) }
+     method interaccion(macaquito) { 
+        game.removeVisual(self)
+        game.say(macaquito, "tengo los apuntes, ahora puedo ir a rendir")
+        macaquito.objetivo(unq_Puerta)
+        macaquito.spawn(macaquito.position())
+        }
 }

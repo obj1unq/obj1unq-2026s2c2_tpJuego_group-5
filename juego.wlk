@@ -42,20 +42,18 @@ class Nivel inherits Etapa {
     method generadorDeCarriles()
     method cantidadDeCarriles()
     method spawnAlumno() = game.at(4,0)
-
     method ambiente() {}      // por defecto, sin efectos
-
+    method objetivo()
 
     override method configurar() {
         self.generadorDeCarriles().generar(self.cantidadDeCarriles())
-
+        alumno.objetivo(self.objetivo())
         alumno.empezarEn(self.spawnAlumno()) 
         salud.iniciar()
-        alumno.volverAlInicio()
         game.addVisual(alumno)
         game.addVisual(unq_Puerta)
-
         game.onCollideDo(alumno, { algo => alumno.interactuar(algo) })
+        self.objetivo().agregarObjetivo()
 
         keyboard.left().onPressDo({ alumno.mover(izquierda) })
         keyboard.right().onPressDo({ alumno.mover(derecha) })

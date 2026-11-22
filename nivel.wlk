@@ -25,6 +25,7 @@ object nivel1 inherits Nivel {
         tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones])        // la fabrica solo es de autos y camiones
     )
     override method cantidadDeCarriles() = 4
+    override method objetivo() = unq_Puerta
     override method siguienteEtapa() = presentacionNivel2
 }
 
@@ -43,7 +44,9 @@ object nivel2 inherits Nivel {
     override method cantidadDeCarriles() = 3
     override method ambiente() { lluvia.iniciar() }                                                             // <- esta línea hace que llueva en el nivel 2
     override method siguienteEtapa() = presentacionNivel3
-    override method spawnAlumno() = game.at(5,6)  
+    override method spawnAlumno() = game.at(5,6) 
+    override method objetivo() = apuntes
+    
 }
 
 object presentacionNivel3 inherits Presentacion {
@@ -60,4 +63,5 @@ object nivel3 inherits Nivel {
     )
     override method cantidadDeCarriles() = 4
     override method siguienteEtapa() = menuPrincipal
+    override method objetivo() = unq_Puerta
 }
