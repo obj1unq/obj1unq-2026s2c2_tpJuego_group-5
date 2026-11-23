@@ -44,7 +44,7 @@ object nivel2 inherits Nivel {
     override method generadorDeCarriles() = new Generador(
         filasDisponibles = [ 1, 2, 3, 4],
         tiempoDeEspera = 1000,
-        tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos])        //la fabrica es de motos, autos y camiones
+        tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos, fabricaDeColectivos])        //la fabrica es de motos, autos, camiones y colectivos
     )
     override method cantidadDeCarriles() = 3
     override method ambiente() { lluvia.iniciar() }                                                             // <- esta línea hace que llueva en el nivel 2

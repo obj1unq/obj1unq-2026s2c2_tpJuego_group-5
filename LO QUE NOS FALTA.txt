@@ -1,20 +1,20 @@
-comportamiento para el juego: 
-	vehiculos y personajes NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo
-	lluvia, se ve menos en el carril
+Xcomportamiento para el juego: 
+X	vehiculos y personajes NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo
+X	lluvia, se ve menos en el carril
 
 nivel 1 
 
-solo hay autos y camiones
+X solo hay autos y camiones
 
 
 ----------------------------------------------------------------------------------------------------------------
 nivel 2
 
- (5,6) down en busqueda de apuntes tiene que volver al banco de plaza (ponemos los apuntes y el paraguas ahi)
+X (5,6) down en busqueda de apuntes tiene que volver al banco de plaza (ponemos los apuntes y el paraguas ahi)
 
-se agrega el colectivo
-hay que hacer llover y ver que se puede hacer con el paraguas y la lluvia
-falta sacar el mensaje de "llegué a la unq" en la parte inicial, el objetivo es recuperar los apuntes y luego volver a la unq
+X se agrega el colectivo
+X hay que hacer llover y ver que se puede hacer con el paraguas y la lluvia
+X falta sacar el mensaje de "llegué a la unq" en la parte inicial, el objetivo es recuperar los apuntes y luego volver a la unq
 ----------------------------------------------------------------------------------------------------------------
 nivel 3 
 
@@ -28,7 +28,7 @@ hacer muchos test
 ----------------------------------------------------------------------------------------------------------------
 actualizacion 22 de noviembre
 
-NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo
-lo de la lluvia esta hecho
+x NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo 
+x lo de la lluvia esta hecho
 
 estamos en la pantalla de biemvenida del nivel 3
