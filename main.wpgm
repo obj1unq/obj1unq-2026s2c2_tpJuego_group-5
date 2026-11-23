@@ -1,0 +1,9 @@
+import wollok.game.*
+import worldUNQ.*
+import juego.*
+
+
+program main {
+    tablero.iniciar()
+    gestorDeEtapas.comenzar()
+}
