@@ -1,5 +1,5 @@
 comportamiento para el juego: 
-	vehiculos y personajes
+	vehiculos y personajes NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo
 	lluvia, se ve menos en el carril
 
 nivel 1 
@@ -24,3 +24,11 @@ dentro de la unqui, con tiempo
 
 
 hacer muchos test
+----------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------
+actualizacion 22 de noviembre
+
+NO HAY NIVEL 3 EN LA CALLE, No usamos el colectivo
+lo de la lluvia esta hecho
+
+estamos en la pantalla de biemvenida del nivel 3

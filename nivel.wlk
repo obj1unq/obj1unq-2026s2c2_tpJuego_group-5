@@ -31,6 +31,11 @@ object nivel1 inherits Nivel {
 
 object presentacionNivel2 inherits Presentacion {
     override method fondo() = fondoDescriptivoNivel2                                    //esta es la imagen en el Agora
+    override method siguienteEtapa() = presentacionNivel22
+}
+
+object presentacionNivel22 inherits Presentacion {
+    override method fondo() = fondoDescriptivoNivel22                                    //esta es la imagen en el Agora
     override method siguienteEtapa() = nivel2
 }
 
@@ -50,7 +55,7 @@ object nivel2 inherits Nivel {
 }
 
 object presentacionNivel3 inherits Presentacion {
-    override method fondo() = fondoDescriptivoNivel1
+    override method fondo() = fondoDescriptivoNivel3
     override method siguienteEtapa() = nivel3
 }
 

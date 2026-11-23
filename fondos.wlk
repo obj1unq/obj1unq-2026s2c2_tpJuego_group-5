@@ -20,9 +20,20 @@ object fondoNivel1 inherits ImagenFondo {
 object fondoDescriptivoNivel2 inherits ImagenFondo {
     override method image() = "llegoALaUnq.png"
 }
+
+object fondoDescriptivoNivel22 inherits ImagenFondo {               //esta pantalla es agregada para que sepa que puede usar el paraguas
+    override method image() = "pantallaParaguas.png"                
+}
+
 object fondoNivel2 inherits ImagenFondo {
     override method image() = "fondo_2.jpeg"
 }
+
+object fondoDescriptivoNivel3 inherits ImagenFondo {
+    override method image() = "pantallaLlegandoTarde.png"
+}
+
+
 object fondoNivel3 inherits ImagenFondo {
     override method image() = "fondo_3.jpeg"
 }
