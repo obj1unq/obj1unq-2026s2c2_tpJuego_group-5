@@ -189,3 +189,57 @@ describe "Nuestro makakito - vidas y atropellos" {
 		assert.equals("estudiante_1vida.png", alumno.image())
 	}
 }
+// =====================================================================
+//  SALUD y VIDA
+// =====================================================================
+describe "Salud y Vida" {
+
+	test "salud empieza con 3 vidas" {
+		assert.that(salud.hayVidas())
+		assert.equals(3, salud.cuantasVidasHay())
+	}
+
+	test "perder una vida deja 2 vidas" {
+		salud.perderUnaVida()
+		assert.equals(2, salud.cuantasVidasHay())
+	}
+
+	test "perder tres vidas deja 0 vidas y ya no hay vidas" {
+		3.times({ n => salud.perderUnaVida() })
+		assert.equals(0, salud.cuantasVidasHay())
+		assert.notThat(salud.hayVidas())
+	}
+
+	test "perder una vida cuando no quedan no rompe nada" {
+		4.times({ n => salud.perderUnaVida() })
+		assert.equals(0, salud.cuantasVidasHay())
+	}
+
+	test "recuperar todas restaura las 3 vidas" {
+		3.times({ n => salud.perderUnaVida() })
+		salud.recuperarTodas()
+		assert.equals(3, salud.cuantasVidasHay())
+	}
+
+	test "una vida nueva no esta perdida y se ve como corazon vivo" {
+		const vida = new Vida(position = game.at(0, 0), cantidadDeVidas = 1)
+		assert.notThat(vida.estaPerdida())
+		assert.equals("vivo.png", vida.image())
+	}
+
+	test "una vida marcada como perdida se ve como corazon muerto" {
+		const vida = new Vida(position = game.at(0, 0), cantidadDeVidas = 1)
+		vida.marcarComoPerdida()
+		assert.that(vida.estaPerdida())
+		assert.equals("muerto.png", vida.image())
+	}
+
+	test "una vida perdida puede marcarse como recuperada" {
+		const vida = new Vida(position = game.at(0, 0), cantidadDeVidas = 1)
+		vida.marcarComoPerdida()
+		vida.marcarComoRecuperada()
+		assert.notThat(vida.estaPerdida())
+		assert.equals("vivo.png", vida.image())
+	}
+}
+
