@@ -13,10 +13,29 @@ object alumno {
     var estado = vivo
     var spawn = game.at(4,0)
     var property objetivo = unq_Puerta  
-	
+	var tieneParaguas = false                               //se agrego para configurar el paraguas
+    var paraguasAbierto = false                             //se agrego para configurar el paraguas
+
+
     method estado(_estado)  {estado =  _estado}  
-    method image() = "estudiante_" + estado.cuantasVidasHay() + "vida.png"
-	
+    method image() = "estudiante" + self.sufijoParaguas() + "_" + estado.cuantasVidasHay() + "vida.png"
+
+    // no existe estudianteParaguas_0vida.png, asi que sin vidas se muestra el personaje normal
+    method sufijoParaguas() = if (self.paraguasAbierto()) "Paraguas" else ""
+
+    // ---- paraguas ----
+    method tieneParaguas() = tieneParaguas
+    method paraguasAbierto() = paraguasAbierto && estado.cuantasVidasHay() > 0   // la lluvia puede consultar esto
+    method conseguirParaguas() { tieneParaguas = true }
+    method sinParaguas() {
+        tieneParaguas = false
+        paraguasAbierto = false
+    }
+    method alternarParaguas() {
+        if (tieneParaguas) { paraguasAbierto = !paraguasAbierto }                               //hasta aca necesita para implementar el paraguas
+    }
+    
+    
     method descontarVida(){
 		estado.vidaActual()
 	}
@@ -92,11 +111,12 @@ object unq_Puerta {
 
 object apuntes{
     var property position = game.at(2,0)
-    method image() = "apuntes.png" 
+    method image() = "paraguas-apuntes.png"                                     //modigique la imagen
     method agregarObjetivo() { game.addVisual(self) }
      method interaccion(macaquito) { 
         game.removeVisual(self)
-        game.say(macaquito, "tengo los apuntes, ahora puedo ir a rendir")
+        macaquito.conseguirParaguas()                                           //cambia el estado 
+        game.say(macaquito, "tengo los apuntes y el paraguas (P), ahora puedo ir a rendir")
         macaquito.objetivo(unq_Puerta)
         macaquito.spawn(macaquito.position())
         }

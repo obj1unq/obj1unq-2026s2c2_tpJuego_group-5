@@ -35,9 +35,9 @@ object presentacionNivel2 inherits Presentacion {
 }
 
 object nivel2 inherits Nivel {
-    override method fondo() = fondoNivel2
+    override method fondo() = fondoNivel1
     override method generadorDeCarriles() = new Generador(
-        filasDisponibles = [ 2, 3, 3],
+        filasDisponibles = [ 1, 2, 3, 4],
         tiempoDeEspera = 1000,
         tipoDeFabrica = new FabricaMixta(fabricas = [fabricaDeAutos, fabricaDeCamiones, fabricaDeMotos])        //la fabrica es de motos, autos y camiones
     )

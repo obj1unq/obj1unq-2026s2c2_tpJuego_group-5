@@ -48,6 +48,7 @@ class Nivel inherits Etapa {
     override method configurar() {
         self.generadorDeCarriles().generar(self.cantidadDeCarriles())
         alumno.objetivo(self.objetivo())
+        alumno.sinParaguas()                                                            //cada nivel arranca sin paraguas
         alumno.empezarEn(self.spawnAlumno()) 
         salud.iniciar()
         game.addVisual(alumno)
@@ -60,6 +61,7 @@ class Nivel inherits Etapa {
         keyboard.up().onPressDo({ alumno.mover(arriba) })
         keyboard.down().onPressDo({ alumno.mover(abajo) })
         keyboard.r().onPressDo({ alumno.reinicio() })
+        keyboard.p().onPressDo({ alumno.alternarParaguas() })                           //abrir/cerrar paraguas (solo si lo tiene)
 
         self.ambiente()                                                                 //esta linea es para que pueda llover
     }
