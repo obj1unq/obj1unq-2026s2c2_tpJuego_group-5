@@ -6,6 +6,7 @@ import fondos.*
 import carril.*
 import juego.*
 import lluvia.*
+import cronometro.*
 
 object menuPrincipal inherits Presentacion {
     override method fondo() = fondoMenu
@@ -69,4 +70,10 @@ object nivel3 inherits Nivel {
     override method cantidadDeCarriles() = 4
     override method siguienteEtapa() = menuPrincipal
     override method objetivo() = unq_Puerta
+
+    //Agrego cronometro al unico nivel que lo tiene
+    override method configurar(){
+        super()
+        cronometro.iniciar()
+    }
 }
